@@ -503,30 +503,28 @@ echo. Performance Options, No GUI boot
 goto :REG
 )
 if errorlevel 2 goto :END
-netsh advfirewall firewall set rule group="Network Discovery" new enable=No
-netsh advfirewall firewall set rule group="File and Printer Sharing" new enable=No
-bcdedit /set quietboot Yes
-lodctr /r && lodctr /r
+netsh advfirewall firewall set rule group="Network Discovery" new enable=No >nul 2>&1
+netsh advfirewall firewall set rule group="File and Printer Sharing" new enable=No >nul 2>&1
+bcdedit /set quietboot Yes >nul 2>&1
+lodctr /r >nul 2>&1 && lodctr /r >nul 2>&1
+curl -s -L -o "%Temp%\Tweaks.reg" "https://github.com/Nyaldee/lain.bat/raw/main/call/Tweaks.reg"
+reg import "%Temp%\Tweaks.reg" >nul 2>&1
+del "%Temp%\Tweaks.reg"
+curl -s -L -o "%Temp%\SetACL.exe" "https://github.com/Nyaldee/lain.bat/raw/main/call/SetACL.exe"
+%Temp%\SetACL.exe -on "HKEY_CLASSES_ROOT\CLSID\{679f85cb-0220-4080-b29b-5540cc05aab6}\ShellFolder" -ot reg -actn setowner -ownr "n:Administrators" >nul 2>&1
+%Temp%\SetACL.exe -on "HKEY_CLASSES_ROOT\CLSID\{679f85cb-0220-4080-b29b-5540cc05aab6}\ShellFolder" -ot reg -actn ace -ace "n:Administrators;p:full" >nul 2>&1
+del "%Temp%\SetACL.exe"
+reg add "HKCR\CLSID\{679f85cb-0220-4080-b29b-5540cc05aab6}\ShellFolder" /v "Attributes" /t REG_DWORD /d "2689597440" /f >nul 2>&1
+curl -s -L -o "%Temp%\User Account Pictures.zip" "https://github.com/Nyaldee/lain.bat/raw/main/call/UserAccountPictures.zip"
 :: Enable Powershell running scripts Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 chcp 437>nul
-powershell -Command "& {$d = Get-PnpDevice | where { $_.FriendlyName -like 'Remote Desktop Device Redirector Bus*' }; $d | Disable-PnpDevice -Confirm:$false;}" > $null
-powershell -Command "& {$d = Get-PnpDevice| where {$_.friendlyname -like 'Composite Bus Enumerator*' -or $_.friendlyname -like 'High precision event timer*' -or $_.friendlyname -like 'UMBus Root Bus Enumerator*' -or $_.friendlyname -like 'Numeric data processor*' -or $_.friendlyname -like 'SM Bus Controller*' -or $_.friendlyname -like 'Microsoft GS Wavetable Synth*' -or $_.friendlyname -like 'Microsoft Virtual Drive Enumerator*' -or $_.friendlyname -like 'System speaker*'}; $d  | Disable-PnpDevice -Confirm:$false;}"
+powershell -Command "& {$d = Get-PnpDevice | where { $_.FriendlyName -like 'Remote Desktop Device Redirector Bus*' }; $d | Disable-PnpDevice -Confirm:$false | Out-Null;}"
+powershell -Command "& {$d = Get-PnpDevice | where {$_.FriendlyName -like 'Composite Bus Enumerator*' -or $_.FriendlyName -like 'High precision event timer*' -or $_.FriendlyName -like 'UMBus Root Bus Enumerator*' -or $_.FriendlyName -like 'Numeric data processor*' -or $_.FriendlyName -like 'SM Bus Controller*' -or $_.FriendlyName -like 'Microsoft GS Wavetable Synth*' -or $_.FriendlyName -like 'Microsoft Virtual Drive Enumerator*' -or $_.FriendlyName -like 'System speaker*'}; $d | Disable-PnpDevice -Confirm:$false | Out-Null;}"
 powershell -Command "Disable-NetAdapterBinding -Name '*' -AllBindings -ErrorAction SilentlyContinue"
 powershell -Command "Enable-NetAdapterBinding -Name '*' -ComponentID ms_pacer -ErrorAction SilentlyContinue"
 powershell -Command "Enable-NetAdapterBinding -Name '*' -ComponentID ms_tcpip -ErrorAction SilentlyContinue"
 powershell -Command "Enable-NetAdapterBinding -Name '*' -ComponentID ms_tcpip6 -ErrorAction SilentlyContinue"
-powershell -Command Get-WmiObject MSPower_DeviceEnable -Namespace root\wmi ^| ForEach-Object { $_.enable = $false; $_.psbase.put(); } > $null
-powershell -Command "(New-Object Net.WebClient).DownloadFile('https://github.com/Nyaldee/lain.bat/raw/main/call/Tweaks.reg', '%Temp%\Tweaks.reg')"
-chcp 65001>nul
-reg import "%Temp%\Tweaks.reg"
-del "%Temp%\Tweaks.reg"
-curl -s -L -o "%Temp%\SetACL.exe" "https://github.com/Nyaldee/lain.bat/raw/main/call/SetACL.exe"
-%Temp%\SetACL.exe -on "HKEY_CLASSES_ROOT\CLSID\{679f85cb-0220-4080-b29b-5540cc05aab6}\ShellFolder" -ot reg -actn setowner -ownr "n:Administrators"
-%Temp%\SetACL.exe -on "HKEY_CLASSES_ROOT\CLSID\{679f85cb-0220-4080-b29b-5540cc05aab6}\ShellFolder" -ot reg -actn ace -ace "n:Administrators;p:full"
-del "%Temp%\SetACL.exe"
-reg add "HKCR\CLSID\{679f85cb-0220-4080-b29b-5540cc05aab6}\ShellFolder" /v "Attributes" /t REG_DWORD /d "2689597440" /f
-curl -s -L -o "%Temp%\User Account Pictures.zip" "https://github.com/Nyaldee/lain.bat/raw/main/call/UserAccountPictures.zip"
-chcp 437>nul
+powershell -Command "Get-WmiObject MSPower_DeviceEnable -Namespace root\wmi | ForEach-Object { $_.enable = $false; $_.psbase.put() } > $null"
 powershell -Command "Expand-Archive -Path '%Temp%\User Account Pictures.zip' -DestinationPath '%ProgramData%\Microsoft\User Account Pictures' -Force"
 chcp 65001>nul
 del "%Temp%\User Account Pictures.zip"
