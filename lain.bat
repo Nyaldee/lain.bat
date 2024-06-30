@@ -267,68 +267,69 @@ goto :SERVICES
 )
 if errorlevel 10 (
 :: UdkUserSvc (break search in start menu)
-net stop "UdkUserSvc" & sc config "UdkUserSvc" start= Disabled
+net stop "UdkUserSvc" /y >nul 2>&1 & sc config "UdkUserSvc" start= Disabled >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\UdkUserSvc" /v "Start" /t REG_DWORD /d "4" /f
 pause
 goto :SERVICES
 )
 if errorlevel 9 (
 :: AppX Deployment Service (AppXSVC) (Break Personalization menu and Flow Launcher)
-net stop "AppXSvc" & sc config "AppXSvc" start= Disabled
+net stop "AppXSvc" /y >nul 2>&1 & sc config "AppXSvc" start= Disabled >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\AppXSvc" /v "Start" /t REG_DWORD /d "4" /f
 pause
 goto :SERVICES
 )
 if errorlevel 8 (
 :: Radio Management Service (no internet icon)
-net stop "RmSvc" & sc config "RmSvc" start= Disabled
+net stop "RmSvc" /y >nul 2>&1 & sc config "RmSvc" start= Disabled >nul 2>&1
 pause
 goto :SERVICES
 )
 if errorlevel 7 (
 :: CNG Key Isolation (for CDPSvc)
-net stop "KeyIso" & sc config "KeyIso" start= Disabled
+net stop "KeyIso" /y >nul 2>&1 & sc config "KeyIso" start= Disabled >nul 2>&1
 :: Connected Devices Platform Service (no sound click notification)
-net stop "CDPSvc" & sc config "CDPSvc" start= Disabled
+net stop "CDPSvc" /y >nul 2>&1 & sc config "CDPSvc" start= Disabled >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\CDPSvc" /v "Start" /t REG_DWORD /d "4" /f
 :: Network Connection Broker (CDPSvc depend)
-net stop "NcbService" & sc config "NcbService" start= Disabled
+net stop "NcbService" /y >nul 2>&1 & sc config "NcbService" start= Disabled >nul 2>&1
 :: Connected Devices Platform User Service (no sound click notification)
-net stop "CDPUserSvc" & sc config "CDPUserSvc" start= Disabled
+net stop "CDPUserSvc" /y >nul 2>&1 & sc config "CDPUserSvc" start= Disabled >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\CDPUserSvc" /v "Start" /t REG_DWORD /d "4" /f
 :: Web Account Manager (no sound click notification)
-net stop "TokenBroker" & sc config "TokenBroker" start= Disabled
+net stop "TokenBroker" /y >nul 2>&1 & sc config "TokenBroker" start= Disabled >nul 2>&1
 pause
 goto :SERVICES
 )
 if errorlevel 6 (
 :: DNS Client (VirtualBox Internet)
-net stop "Dnscache" & sc config "Dnscache" start= Disabled
+net stop "Dnscache" /y >nul 2>&1 & sc config "Dnscache" start= Disabled >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache" /v "Start" /t REG_DWORD /d "4" /f
 pause
 goto :SERVICES
 )
 if errorlevel 5 (
 :: Bluetooth Support Service
-net stop "bthserv" & sc config "bthserv" start= Disabled
+net stop "bthserv" /y >nul 2>&1 & sc config "bthserv" start= Disabled >nul 2>&1
+net stop "BTAGService" /y >nul 2>&1 & sc config "BTAGService" start= Disabled >nul 2>&1
 pause
 goto :SERVICES
 )
 if errorlevel 4 (
 :: WLAN AutoConfig
-net stop "WlanSvc" & sc config "WlanSvc" start= Disabled
+net stop "WlanSvc" /y >nul 2>&1 & sc config "WlanSvc" start= Disabled >nul 2>&1
 pause
 goto :SERVICES
 )
 if errorlevel 3 (
 :: TrustedInstaller
-net stop "TrustedInstaller" & sc config "TrustedInstaller" start= Disabled
+net stop "TrustedInstaller" /y >nul 2>&1 & sc config "TrustedInstaller" start= Disabled >nul 2>&1
 pause
 goto :SERVICES
 )
 if errorlevel 2 (
 :: WaaSMedicSvc
-net stop "WaaSMedicSvc" & sc config "WaaSMedicSvc" start= Disabled
+net stop "WaaSMedicSvc" /y >nul 2>&1 & sc config "WaaSMedicSvc" start= Disabled >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\WaaSMedicSvc" /v "Start" /t REG_DWORD /d "4" /f
 pause
 goto :SERVICES
@@ -440,7 +441,8 @@ goto :ESERVICES
 )
 if errorlevel 5 (
 :: Bluetooth Support Service
-net start "bthserv" & sc config "bthserv" start= Demand
+net start "bthserv" >nul 2>&1 & sc config "bthserv" start= Demand >nul 2>&1
+net start "BTAGService" >nul 2>&1 & sc config "BTAGService" start= Demand >nul 2>&1
 pause
 goto :ESERVICES
 )
@@ -531,6 +533,29 @@ del "%Temp%\User Account Pictures.zip"
 
 :END
 echo.===============================================================================
+echo.Désactiver les drivers et services Bluetooth ?
+choice /C:YNRB /N /M "Disable Bluetooth drivers and services ? ['Y'es/'N'o/'R'eset] : "
+if errorlevel 3 (
+@echo off
+net start "bthserv" >nul 2>&1 & sc config "bthserv" start= Demand >nul 2>&1
+net start "BTAGService" >nul 2>&1 & sc config "BTAGService" start= Demand >nul 2>&1
+chcp 437>nul
+powershell -Command "& { Get-PnpDevice -Class 'Net' | Where-Object { $_.FriendlyName -like '*Bluetooth*' } | ForEach-Object { Enable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"
+powershell -Command "& { Get-PnpDevice -Class 'Bluetooth' | Where-Object { $_.FriendlyName -like '*Bluetooth*' } | ForEach-Object { Enable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"
+chcp 65001>nul
+)
+if errorlevel 2 goto :END
+if errorlevel 1 (
+net stop "bthserv" /y >nul 2>&1 & sc config "bthserv" start= Disabled >nul 2>&1
+net stop "BTAGService" /y >nul 2>&1 & sc config "BTAGService" start= Disabled >nul 2>&1
+chcp 437>nul
+powershell -Command "& { Get-PnpDevice -Class 'Net' | Where-Object { $_.FriendlyName -like '*Bluetooth*' } | ForEach-Object { Disable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"
+powershell -Command "& { Get-PnpDevice -Class 'Bluetooth' | Where-Object { $_.FriendlyName -like '*Bluetooth*' } | ForEach-Object { Disable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"
+chcp 65001>nul
+)
+
+:END
+echo.===============================================================================
 echo.Optimiser et activer le plan d'alimentation Ultimate Performance ? (recommandé sur PC fixe)
 choice /C:YNRB /N /M "Optimize and activate the Ultimate Performance power plan ? (Desktop recommended) ['Y'es/'N'o/'R'eset] : "
 if errorlevel 3 (
@@ -550,20 +575,18 @@ powercfg /list
 echo.===============================================================================
 echo.Les DNS suivants seront utilisés :
 echo.The following DNS will be used :
-echo. • 208.67.222.222
-echo. • 208.67.220.220
+echo. • 1.1.1.1
+echo. • 1.0.0.1
 echo.
-echo.Utiliser les DNS OpenDNS ?
-choice /C:YN /N /M "Using OpenDNS? ['Y'es/'N'o]: "
+echo.Utiliser les DNS Cloudflare ?
+choice /C:YN /N /M "Using Cloudflare ? ['Y'es/'N'o]: "
 if errorlevel 2 goto :END
-set DNS1=208.67.222.222
-set DNS2=208.67.220.220
 set INTERFACES="Ethernet" "Ethernet 2" "Wi-Fi" "WiFi"
 for %%I in (%INTERFACES%) do (
-    netsh int ipv4 set dns name="%%I" static %DNS1% primary validate=no > nul
-    netsh int ipv4 add dns name="%%I" %DNS2% index=2 > nul
+    netsh int ipv4 set dns name="%%I" static 1.1.1.1 primary validate=no >nul 2>&1
+    netsh int ipv4 add dns name="%%I" 1.0.0.1 index=2 >nul 2>&1
 )
-ipconfig /flushdns
+ipconfig /flushdns >nul 2>&1
 
 :END
 echo.===============================================================================
