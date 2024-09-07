@@ -422,21 +422,29 @@ bcdedit /set quietboot Yes >nul 2>&1
 lodctr /r >nul 2>&1 && lodctr /r >nul 2>&1
 curl -s -L -o "%Temp%\Tweaks.reg" "https://github.com/Nyaldee/lain.bat/raw/main/call/Tweaks.reg"
 reg import "%Temp%\Tweaks.reg" >nul 2>&1 & del "%Temp%\Tweaks.reg"
-curl -s -L -o "%Temp%\Network.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/Network.bat"
-call "%Temp%\Network.bat" & del "%Temp%\Network.bat"
 curl -s -L -o "%Temp%\SetACL.exe" "https://github.com/Nyaldee/lain.bat/raw/main/call/SetACL.exe"
 %Temp%\SetACL.exe -on "HKEY_CLASSES_ROOT\CLSID\{679f85cb-0220-4080-b29b-5540cc05aab6}\ShellFolder" -ot reg -actn setowner -ownr "n:Administrators" >nul 2>&1
 %Temp%\SetACL.exe -on "HKEY_CLASSES_ROOT\CLSID\{679f85cb-0220-4080-b29b-5540cc05aab6}\ShellFolder" -ot reg -actn ace -ace "n:Administrators;p:full" >nul 2>&1
 del "%Temp%\SetACL.exe"
 reg add "HKCR\CLSID\{679f85cb-0220-4080-b29b-5540cc05aab6}\ShellFolder" /v "Attributes" /t REG_DWORD /d "2689597440" /f >nul 2>&1
 curl -s -L -o "%Temp%\User Account Pictures.zip" "https://github.com/Nyaldee/lain.bat/raw/main/call/UserAccountPictures.zip"
-:: Enable Powershell running scripts Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+powershell -Command "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force"
 powershell -Command "Get-PnpDevice | Where-Object FriendlyName -like 'Remote Desktop Device Redirector Bus*' | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Get-PnpDevice | Where-Object { $_.FriendlyName -like 'Composite Bus Enumerator*' -or $_.FriendlyName -like 'High precision event timer*' -or $_.FriendlyName -like 'UMBus Root Bus Enumerator*' -or $_.FriendlyName -like 'Numeric data processor*' -or $_.FriendlyName -like 'SM Bus Controller*' -or $_.FriendlyName -like 'Microsoft GS Wavetable Synth*' -or $_.FriendlyName -like 'Microsoft Virtual Drive Enumerator*' -or $_.FriendlyName -like 'System speaker*' } | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Get-WmiObject MSPower_DeviceEnable -Namespace root\wmi | ForEach-Object { $_.enable = $false; $_.psbase.put() } > $null"
 powershell -Command "Expand-Archive -Path '%Temp%\User Account Pictures.zip' -DestinationPath '%ProgramData%\Microsoft\User Account Pictures' -Force"
 chcp 65001>nul
 del "%Temp%\User Account Pictures.zip"
+
+:END
+echo.===============================================================================
+echo.Configuration et optimisation du réseau ? (non recommandé)
+choice /C:YN /N /M "Network configuration and optimization ? (not recommended, may break the network) ['Y'es/'N'o] : "
+if errorlevel 2 goto :END
+chcp 437>nul
+curl -s -L -o "%Temp%\Network.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/Network.bat"
+call "%Temp%\Network.bat" & del "%Temp%\Network.bat"
+chcp 65001>nul
 
 :END
 echo.===============================================================================
