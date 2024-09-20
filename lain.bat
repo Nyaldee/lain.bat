@@ -721,14 +721,14 @@ echo.Bloquer l'espionnage et le suivi des IPs (via WindowsSpyBlocker et le fichi
 choice /C:YNR /N /M "Block spying and tracking IPs (via WindowsSpyBlocker and host file) ? You will no longer receive Windows updates. ['Y'es/'N'o/'R'eset] : "
 :: https://github.com/crazy-max/WindowsSpyBlocker
 if errorlevel 3 (
-curl -s -L -o "%Temp%\Disable services.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/CustomHostsRemove.bat"
+curl -s -L -o "%Temp%\CustomHostsRemove.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/CustomHostsRemove.bat"
 call "%Temp%\CustomHostsRemove.bat" & del "%Temp%\CustomHostsRemove.bat"
 curl -s -L -o "%Temp%\FirewallRulesRemove.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/FirewallRulesRemove.bat"
 call "%Temp%\FirewallRulesRemove.bat" & del "%Temp%\FirewallRulesRemove.bat"
 )
 
 if errorlevel 2 goto :END
-curl -s -L -o "%Temp%\Disable services.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/CustomHostsAdd.bat"
+curl -s -L -o "%Temp%\CustomHostsAdd.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/CustomHostsAdd.bat"
 call "%Temp%\CustomHostsAdd.bat" & del "%Temp%\CustomHostsAdd.bat"
 curl -s -L -o "%Temp%\FirewallRulesAdd.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/FirewallRulesAdd.bat"
 call "%Temp%\FirewallRulesAdd.bat" & del "%Temp%\FirewallRulesAdd.bat"
