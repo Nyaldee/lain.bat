@@ -564,9 +564,9 @@ echo Enable .NET Framework 3.5/4.8 packages...
 dism /online /Enable-Feature /FeatureName:NetFx3 /All /NoRestart
 dism /online /Enable-Feature /FeatureName:NetFx4-AdvSrvs /All /NoRestart
 md "%Temp%\Bonjour"
-curl -s -L -o "%Temp%\Bonjour\.NET 7.0.exe" "https://download.visualstudio.microsoft.com/download/pr/08bbfe8f-812d-479f-803b-23ea0bffce47/c320e4b037f3e92ab7ea92c3d7ea3ca1/windowsdesktop-runtime-7.0.20-win-x64.exe"
+curl -s -L -o "%Temp%\Bonjour\.NET 9.0.exe" "https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/9.0.4/windowsdesktop-runtime-9.0.4-win-x64.exe"
 :: https://github.com/abbodi1406/vcredist
-curl -s -L -o "%Temp%\Bonjour\VisualCppRedist_AIO_x86_x64.exe" "https://github.com/abbodi1406/vcredist/releases/download/v0.82.0/VisualCppRedist_AIO_x86_x64.exe"
+curl -s -L -o "%Temp%\Bonjour\VisualCppRedist_AIO_x86_x64.exe" "https://github.com/abbodi1406/vcredist/releases/download/v0.90.0/VisualCppRedist_AIO_x86_x64.exe"
 :: https://github.com/stdin82/htfx
 curl -s -L -o "%Temp%\Bonjour\DirectX_Redist_Repack_x86_x64.zip" "https://github.com/stdin82/htfx/releases/download/v0.0.3/DirectX_Redist_Repack_x86_x64_v2.zip"
 chcp 437>nul
@@ -578,7 +578,7 @@ start /wait "" "%Temp%\Bonjour\VisualCppRedist_AIO_x86_x64.exe" /y
 echo Microsoft Visual C++ Redistributable Runtimes installed successfully.
 start /wait "" "%Temp%\Bonjour\DirectX_Redist_Repack_x86_x64.exe" /y
 echo Microsoft DirectX® End-User Runtime installed successfully.
-rd "%Temp%\Bonjour" /s /q
+rd "%Temp%\Bonjour" /s /q >nul 2>&1
 
 :END
 echo.===============================================================================
@@ -941,7 +941,7 @@ echo. ⣇⢾⡱⠞⠈⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀�
 echo.
 echo.La configuration est terminée, les modifications prendront effet après un redémarrage.
 echo.Configuration is complete, the changes will take effect after a reboot.
-rd "%Temp%\Bonjour" /s /q
+rd "%Temp%\Bonjour" /s /q >nul 2>&1
 echo.Recommencer la configuration ?
 choice /C:YN /N /M "Start the configuration again ? ['Y'es/'N'o] : "
 if errorlevel 2 exit
