@@ -425,8 +425,11 @@ reg import "%Temp%\Tweaks.reg" >nul 2>&1 & del "%Temp%\Tweaks.reg"
 curl -s -L -o "%Temp%\SetACL.exe" "https://github.com/Nyaldee/lain.bat/raw/main/call/SetACL.exe"
 %Temp%\SetACL.exe -on "HKEY_CLASSES_ROOT\CLSID\{679f85cb-0220-4080-b29b-5540cc05aab6}\ShellFolder" -ot reg -actn setowner -ownr "n:Administrators" >nul 2>&1
 %Temp%\SetACL.exe -on "HKEY_CLASSES_ROOT\CLSID\{679f85cb-0220-4080-b29b-5540cc05aab6}\ShellFolder" -ot reg -actn ace -ace "n:Administrators;p:full" >nul 2>&1
+%Temp%\SetACL.exe -on "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -ot reg -actn setowner -ownr "n:Administrators" >nul 2>&1
+%Temp%\SetACL.exe -on "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -ot reg -actn ace -ace "n:Administrators;p:full" >nul 2>&1
 del "%Temp%\SetACL.exe"
 reg add "HKCR\CLSID\{679f85cb-0220-4080-b29b-5540cc05aab6}\ShellFolder" /v "Attributes" /t REG_DWORD /d "2689597440" /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarDa" /t REG_DWORD /d 0 /f >nul 2>&1
 curl -s -L -o "%Temp%\User Account Pictures.zip" "https://github.com/Nyaldee/lain.bat/raw/main/call/UserAccountPictures.zip"
 powershell -Command "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force"
 powershell -Command "Get-PnpDevice | Where-Object FriendlyName -like 'Remote Desktop Device Redirector Bus*' | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue | Out-Null"
@@ -501,6 +504,7 @@ echo. • VirtualMachinePlatform
 echo. • HypervisorPlatform
 echo. • Windows PowerShell 2.0
 echo. • Work Folders Client
+echo. • SMB1Protocol
 echo.
 echo.Désactiver VBS (Virtualization-based security) et d'autres fonctionnalités inutiles ?
 choice /C:YN /N /M "Disable VBS and other unnecessary features ? ['Y'es/'N'o] : "
@@ -510,6 +514,7 @@ dism /online /Disable-Feature /FeatureName:"VirtualMachinePlatform" /Quiet /NoRe
 dism /online /Disable-Feature /FeatureName:"HypervisorPlatform" /Quiet /NoRestart >nul 2>&1
 :: Others
 dism /online /Disable-Feature /FeatureName:"MicrosoftWindowsPowerShellV2Root" /Quiet /NoRestart >nul 2>&1
+dism /online /Disable-Feature /FeatureName:"SMB1Protocol" /Quiet /NoRestart >nul 2>&1
 dism /online /Disable-Feature /FeatureName:"WorkFolders-Client" /Quiet /NoRestart >nul 2>&1
 dism /online /Disable-Feature /FeatureName:"MediaPlayback" /Quiet /NoRestart >nul 2>&1
 dism /online /Disable-Feature /FeatureName:"Printing-XPSServices-Features" /Quiet /NoRestart >nul 2>&1
