@@ -31,8 +31,10 @@ echo. Use at your own risk, without any warranty, make a backup of your files
 echo. before proceeding and create a restore point before if necessary.
 echo.
 echo. Bios optimization :
-echo. Enable : Re-Size BAR Support, Precision Boost Overdrive, XMP profile
-echo. Disable : Global C-state Control, Internal Graphics, SVM Mode, Drivers Software
+echo. Enable : Re-Size BAR Support/4G Decoding, Precision Boost Overdrive, EXPO/XMP profile, L1/L2 Prefetcher,
+echo. CPPC/CPPC Preferred
+echo. Disable : Internal Graphics, SVM/VMX Mode, Drivers Software, CSM Support, Fastboot, High Precision Event Timer (?)
+echo. Don't disable/try before : Global C-state Control, ACPI_CST C1 Declaration
 echo.
 choice /C:AR /N /M "+-+-+-+-+-+-+-+-+-+-+-+-+-+[ 'A'ccept / 'R'eject ]+-+-+-+-+-+-+-+-+-+-+-+-+-+"
 if errorlevel 2 exit
@@ -567,11 +569,11 @@ echo Enable .NET Framework 3.5/4.8 packages...
 dism /online /Enable-Feature /FeatureName:NetFx3 /All /NoRestart
 dism /online /Enable-Feature /FeatureName:NetFx4-AdvSrvs /All /NoRestart
 md "%Temp%\Bonjour"
-curl -s -L -o "%Temp%\Bonjour\.NET 9.0.exe" "https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/9.0.4/windowsdesktop-runtime-9.0.4-win-x64.exe"
+curl -s -L -o "%Temp%\Bonjour\.NET 9.0.exe" "https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/9.0.9/windowsdesktop-runtime-9.0.9-win-x64.exe"
 :: https://github.com/abbodi1406/vcredist
-curl -s -L -o "%Temp%\Bonjour\VisualCppRedist_AIO_x86_x64.exe" "https://github.com/abbodi1406/vcredist/releases/download/v0.90.0/VisualCppRedist_AIO_x86_x64.exe"
+curl -s -L -o "%Temp%\Bonjour\VisualCppRedist_AIO_x86_x64.exe" "https://github.com/abbodi1406/vcredist/releases/download/v1.100.0/VisualCppRedist_AIO_x86_x64.exe"
 :: https://github.com/stdin82/htfx
-curl -s -L -o "%Temp%\Bonjour\DirectX_Redist_Repack_x86_x64.zip" "https://github.com/stdin82/htfx/releases/download/v0.0.3/DirectX_Redist_Repack_x86_x64_v2.zip"
+curl -s -L -o "%Temp%\Bonjour\DirectX_Redist_Repack_x86_x64.zip" "https://github.com/stdin82/htfx/releases/download/v0.0.4/DirectX_Redist_Repack_x86_x64_v3.zip"
 chcp 437>nul
 powershell -Command "Expand-Archive -Path '%Temp%\Bonjour\DirectX_Redist_Repack_x86_x64.zip' -DestinationPath '%Temp%\Bonjour' -Force"
 chcp 65001>nul
