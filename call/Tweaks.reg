@@ -1,5 +1,10 @@
 Windows Registry Editor Version 5.00
 
+[HKEY_CURRENT_USER\Software\7-Zip\Options]
+"ContextMenu"=dword:40000127
+"MenuIcons"=dword:00000000
+"CascadedMenu"=dword:00000001
+"ElimDupExtract"=dword:00000001
 [HKEY_CURRENT_USER\Control Panel\Keyboard]
 "PrintScreenKeyForSnippingEnabled"=dword:00000000
 [HKEY_CURRENT_USER\Control Panel\UnsupportedHardwareNotificationCache]
@@ -15,10 +20,6 @@ Windows Registry Editor Version 5.00
 "ListviewShadow"=dword:0
 "IconsOnly"=dword:0
 "Start_TrackProgs"=dword:00000000
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Script Host\Settings]
-"Enabled"=dword:00000000
-[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters]
-"EnableLMHOSTS"=dword:00000000
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM]
 "EnableAeroPeek"=dword:0
 "AlwaysHibernateThumbnails"=dword:0
@@ -31,6 +32,20 @@ Windows Registry Editor Version 5.00
 "Win32PrioritySeparation"=dword:0000002a
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance]
 "fAllowToGetHelp"=dword:00000000
+[HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\AFD\Parameters]
+"DefaultSendWindow"=dword:00100000
+"DefaultReceiveWindow"=dword:00100000
+"DynamicSendBufferDisable"=dword:00000001
+"BufferAlignment"=dword:00000001
+"DoNotHoldNICBuffers"=dword:00000001
+"DisableDirectAcceptEx"=dword:00000001
+"DisableChainedReceive"=dword:00000001
+"DisableRawSecurity"=dword:00000001
+"IgnorePushBitOnReceives"=dword:00000001
+"IgnoreOrderlyRelease"=dword:00000001
+"DisableAddressSharing"=dword:00000001
+"FastSendDatagramThreshold"=dword:00000400
+"FastCopyReceiveThreshold"=dword:00000400
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge]
 "StartupBoostEnabled"=dword:00000000
 "HardwareAccelerationModeEnabled"=dword:00000000
@@ -144,6 +159,10 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile]
 "NetworkThrottlingIndex"=dword:ffffffff
 "SystemResponsiveness"=dword:00000000
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Script Host\Settings]
+"Enabled"=dword:00000000
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters]
+"EnableLMHOSTS"=dword:00000000
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power]
 "HibernateEnabled"=dword:00000000
 "HibernateEnabledDefault"=dword:00000000
@@ -305,8 +324,7 @@ Windows Registry Editor Version 5.00
 "Value"="Deny"
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\radios]
 "Value"="Deny"
-[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\bluetoothSync]
-"Value"="Deny"
+[HKEY_CURRENT_USE
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appDiagnostics]
 "Value"="Deny"
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\documentsLibrary]
