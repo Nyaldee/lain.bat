@@ -573,24 +573,41 @@ echo.Installer les fichiers (nécessaire pour le service de résolution des dél
 choice /C:YN /N /M "Install the files ? (required for Timer Resolution Service) ['Y'es/'N'o] : "
 if errorlevel 2 goto :END
 
-echo Enable .NET Framework 3.5/4.8 packages...
 dism /online /Enable-Feature /FeatureName:NetFx3 /All /NoRestart
 dism /online /Enable-Feature /FeatureName:NetFx4-AdvSrvs /All /NoRestart
 md "%Temp%\Bonjour"
 curl -s -L -o "%Temp%\Bonjour\.NET 9.0.exe" "https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/9.0.9/windowsdesktop-runtime-9.0.9-win-x64.exe"
-:: https://github.com/abbodi1406/vcredist
-curl -s -L -o "%Temp%\Bonjour\VisualCppRedist_AIO_x86_x64.exe" "https://github.com/abbodi1406/vcredist/releases/download/v1.100.0/VisualCppRedist_AIO_x86_x64.exe"
+curl -s -L -o "%Temp%\vcredist2005_x86.exe" "https://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x86.EXE"
+curl -s -L -o "%Temp%\vcredist2005_x64.exe" "https://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x64.EXE"
+curl -s -L -o "%Temp%\vcredist2008_x86.exe" "https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x86.exe"
+curl -s -L -o "%Temp%\vcredist2008_x64.exe" "https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x64.exe"
+curl -s -L -o "%Temp%\vcredist2010_x86.exe" "https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe"
+curl -s -L -o "%Temp%\vcredist2010_x64.exe" "https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x64.exe"
+curl -s -L -o "%Temp%\vcredist2012_x86.exe" "https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x86.exe"
+curl -s -L -o "%Temp%\vcredist2012_x64.exe" "https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe"
+curl -s -L -o "%Temp%\vcredist2013_x86.exe" "https://aka.ms/highdpimfc2013x86enu"
+curl -s -L -o "%Temp%\vcredist2013_x64.exe" "https://aka.ms/highdpimfc2013x64enu"
+curl -s -L -o "%Temp%\vcredist2022_x86.exe" "https://aka.ms/vs/17/release/vc_redist.x86.exe"
+curl -s -L -o "%Temp%\vcredist2022_x64.exe" "https://aka.ms/vs/17/release/vc_redist.x64.exe"
+start /wait "" "%Temp%\vcredist2005_x86.exe" /q
+start /wait "" "%Temp%\vcredist2005_x64.exe" /q
+start /wait "" "%Temp%\vcredist2008_x86.exe" /qb
+start /wait "" "%Temp%\vcredist2008_x64.exe" /qb
+start /wait "" "%Temp%\vcredist2010_x86.exe" /passive /norestart
+start /wait "" "%Temp%\vcredist2010_x64.exe" /passive /norestart
+start /wait "" "%Temp%\vcredist2012_x86.exe" /passive /norestart
+start /wait "" "%Temp%\vcredist2012_x64.exe" /passive /norestart
+start /wait "" "%Temp%\vcredist2013_x86.exe" /passive /norestart
+start /wait "" "%Temp%\vcredist2013_x64.exe" /passive /norestart
+start /wait "" "%Temp%\vcredist2022_x86.exe" /passive /norestart
+start /wait "" "%Temp%\vcredist2022_x64.exe" /passive /norestart
 :: https://github.com/stdin82/htfx
 curl -s -L -o "%Temp%\Bonjour\DirectX_Redist_Repack_x86_x64.zip" "https://github.com/stdin82/htfx/releases/download/v0.0.4/DirectX_Redist_Repack_x86_x64_v3.zip"
 chcp 437>nul
 powershell -Command "Expand-Archive -Path '%Temp%\Bonjour\DirectX_Redist_Repack_x86_x64.zip' -DestinationPath '%Temp%\Bonjour' -Force"
 chcp 65001>nul
-start /wait "" "%Temp%\Bonjour\.NET 7.0.exe" /install /quiet /norestart
-echo .NET 7.0 Desktop Runtime installed successfully.
-start /wait "" "%Temp%\Bonjour\VisualCppRedist_AIO_x86_x64.exe" /y
-echo Microsoft Visual C++ Redistributable Runtimes installed successfully.
 start /wait "" "%Temp%\Bonjour\DirectX_Redist_Repack_x86_x64.exe" /y
-echo Microsoft DirectX® End-User Runtime installed successfully.
+start /wait "" "%Temp%\Bonjour\.NET 9.0.exe" /install /quiet /norestart
 rd "%Temp%\Bonjour" /s /q >nul 2>&1
 
 :END
