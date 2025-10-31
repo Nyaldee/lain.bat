@@ -421,6 +421,14 @@ echo.Veuillez patienter...
 echo.Please wait...
 chcp 437>nul
 bcdedit /set quietboot Yes >nul 2>&1
+bcdedit /set bootuxdisabled On >nul 2>&1
+bcdedit /set disabledynamictick Yes >nul 2>&1
+bcdedit /set useplatformtick Yes >nul 2>&1
+bcdedit /set tscsyncpolicy enhanced >nul 2>&1
+bcdedit /set uselegacyapicmode No >nul 2>&1
+bcdedit /set usephysicaldestination No >nul 2>&1
+bcdedit /deletevalue useplatformclock >nul 2>&1
+::bcdedit /enum
 lodctr /r >nul 2>&1 && lodctr /r >nul 2>&1
 curl -s -L -o "%Temp%\Tweaks.reg" "https://github.com/Nyaldee/lain.bat/raw/main/call/Tweaks.reg"
 reg import "%Temp%\Tweaks.reg" >nul 2>&1 & del "%Temp%\Tweaks.reg"
