@@ -563,9 +563,8 @@ chcp 65001>nul
 echo.===============================================================================
 echo.Les fichiers suivants seront installés :
 echo.The following files will be installed :
-echo. • .NET Framework 3.5
-echo. • .NET Framework 4.8
-echo. • .NET 7.0 Desktop Runtime
+echo. • .NET Framework 3.5/4.8
+echo. • .NET 9.0 Runtime
 echo. • Microsoft DirectX® End-User Runtime
 echo. • Microsoft Visual C++ Redistributable Runtimes
 echo.
@@ -575,8 +574,8 @@ if errorlevel 2 goto :END
 
 dism /online /Enable-Feature /FeatureName:NetFx3 /All /NoRestart
 dism /online /Enable-Feature /FeatureName:NetFx4-AdvSrvs /All /NoRestart
-md "%Temp%\Bonjour"
-curl -s -L -o "%Temp%\Bonjour\.NET 9.0.exe" "https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/9.0.9/windowsdesktop-runtime-9.0.9-win-x64.exe"
+md "%Temp%\Bonjour" 2>nul
+curl -s -L -o "%Temp%\Bonjour\.NET 9.0.exe" "https://builds.dotnet.microsoft.com/dotnet/Runtime/9.0.10/dotnet-runtime-9.0.10-win-x64.exe"
 curl -s -L -o "%Temp%\vcredist2005_x86.exe" "https://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x86.EXE"
 curl -s -L -o "%Temp%\vcredist2005_x64.exe" "https://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x64.EXE"
 curl -s -L -o "%Temp%\vcredist2008_x86.exe" "https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x86.exe"
