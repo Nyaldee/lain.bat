@@ -1,3 +1,4 @@
+@echo off
 powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61 77777777-7777-7777-7777-777777777777 >nul 2>&1
 powercfg -setactive "77777777-7777-7777-7777-777777777777" >nul 2>&1
 powercfg -delete 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c >nul 2>&1
