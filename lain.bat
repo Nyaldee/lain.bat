@@ -584,37 +584,34 @@ if errorlevel 2 goto :END
 
 dism /online /Enable-Feature /FeatureName:NetFx3 /All /NoRestart
 dism /online /Enable-Feature /FeatureName:NetFx4-AdvSrvs /All /NoRestart
-md "%Temp%\Bonjour" 2>nul
-curl -s -L -o "%Temp%\Bonjour\.NET 9.0.exe" "https://builds.dotnet.microsoft.com/dotnet/Runtime/9.0.10/dotnet-runtime-9.0.10-win-x64.exe"
-curl -s -L -o "%Temp%\vcredist2005_x86.exe" "https://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x86.EXE"
-curl -s -L -o "%Temp%\vcredist2005_x64.exe" "https://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x64.EXE"
-curl -s -L -o "%Temp%\vcredist2008_x86.exe" "https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x86.exe"
-curl -s -L -o "%Temp%\vcredist2008_x64.exe" "https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x64.exe"
-curl -s -L -o "%Temp%\vcredist2010_x86.exe" "https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe"
-curl -s -L -o "%Temp%\vcredist2010_x64.exe" "https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x64.exe"
-curl -s -L -o "%Temp%\vcredist2012_x86.exe" "https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x86.exe"
-curl -s -L -o "%Temp%\vcredist2012_x64.exe" "https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe"
-curl -s -L -o "%Temp%\vcredist2013_x86.exe" "https://aka.ms/highdpimfc2013x86enu"
-curl -s -L -o "%Temp%\vcredist2013_x64.exe" "https://aka.ms/highdpimfc2013x64enu"
-curl -s -L -o "%Temp%\vcredist2022_x86.exe" "https://aka.ms/vs/17/release/vc_redist.x86.exe"
-curl -s -L -o "%Temp%\vcredist2022_x64.exe" "https://aka.ms/vs/17/release/vc_redist.x64.exe"
-start /wait "" "%Temp%\vcredist2005_x86.exe" /q
-start /wait "" "%Temp%\vcredist2005_x64.exe" /q
-start /wait "" "%Temp%\vcredist2008_x86.exe" /qb
-start /wait "" "%Temp%\vcredist2008_x64.exe" /qb
-start /wait "" "%Temp%\vcredist2010_x86.exe" /passive /norestart
-start /wait "" "%Temp%\vcredist2010_x64.exe" /passive /norestart
-start /wait "" "%Temp%\vcredist2012_x86.exe" /passive /norestart
-start /wait "" "%Temp%\vcredist2012_x64.exe" /passive /norestart
-start /wait "" "%Temp%\vcredist2013_x86.exe" /passive /norestart
-start /wait "" "%Temp%\vcredist2013_x64.exe" /passive /norestart
-start /wait "" "%Temp%\vcredist2022_x86.exe" /passive /norestart
-start /wait "" "%Temp%\vcredist2022_x64.exe" /passive /norestart
-:: https://github.com/stdin82/htfx
+md "%Temp%\Bonjour" >nul 2>&1
 curl -s -L -o "%Temp%\Bonjour\DirectX_Redist_Repack_x86_x64.zip" "https://github.com/stdin82/htfx/releases/download/v0.0.4/DirectX_Redist_Repack_x86_x64_v3.zip"
-chcp 437>nul
-powershell -Command "Expand-Archive -Path '%Temp%\Bonjour\DirectX_Redist_Repack_x86_x64.zip' -DestinationPath '%Temp%\Bonjour' -Force"
-chcp 65001>nul
+tar -xf "%Temp%\Bonjour\DirectX_Redist_Repack_x86_x64.zip" -C "%Temp%\Bonjour"
+curl -s -L -o "%Temp%\Bonjour\.NET 9.0.exe" "https://builds.dotnet.microsoft.com/dotnet/Runtime/9.0.10/dotnet-runtime-9.0.10-win-x64.exe"
+curl -s -L -o "%Temp%\Bonjour\vcredist2005_x86.exe" "https://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x86.EXE"
+curl -s -L -o "%Temp%\Bonjour\vcredist2005_x64.exe" "https://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x64.EXE"
+curl -s -L -o "%Temp%\Bonjour\vcredist2008_x86.exe" "https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x86.exe"
+curl -s -L -o "%Temp%\Bonjour\vcredist2008_x64.exe" "https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x64.exe"
+curl -s -L -o "%Temp%\Bonjour\vcredist2010_x86.exe" "https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe"
+curl -s -L -o "%Temp%\Bonjour\vcredist2010_x64.exe" "https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x64.exe"
+curl -s -L -o "%Temp%\Bonjour\vcredist2012_x86.exe" "https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x86.exe"
+curl -s -L -o "%Temp%\Bonjour\vcredist2012_x64.exe" "https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe"
+curl -s -L -o "%Temp%\Bonjour\vcredist2013_x86.exe" "https://aka.ms/highdpimfc2013x86enu"
+curl -s -L -o "%Temp%\Bonjour\vcredist2013_x64.exe" "https://aka.ms/highdpimfc2013x64enu"
+curl -s -L -o "%Temp%\Bonjour\vcredist2022_x86.exe" "https://aka.ms/vs/17/release/vc_redist.x86.exe"
+curl -s -L -o "%Temp%\Bonjour\vcredist2022_x64.exe" "https://aka.ms/vs/17/release/vc_redist.x64.exe"
+start /wait "" "%Temp%\Bonjour\vcredist2005_x86.exe" /q
+start /wait "" "%Temp%\Bonjour\vcredist2005_x64.exe" /q
+start /wait "" "%Temp%\Bonjour\vcredist2008_x86.exe" /qb
+start /wait "" "%Temp%\Bonjour\vcredist2008_x64.exe" /qb
+start /wait "" "%Temp%\Bonjour\vcredist2010_x86.exe" /passive /norestart
+start /wait "" "%Temp%\Bonjour\vcredist2010_x64.exe" /passive /norestart
+start /wait "" "%Temp%\Bonjour\vcredist2012_x86.exe" /passive /norestart
+start /wait "" "%Temp%\Bonjour\vcredist2012_x64.exe" /passive /norestart
+start /wait "" "%Temp%\Bonjour\vcredist2013_x86.exe" /passive /norestart
+start /wait "" "%Temp%\Bonjour\vcredist2013_x64.exe" /passive /norestart
+start /wait "" "%Temp%\Bonjour\vcredist2022_x86.exe" /passive /norestart
+start /wait "" "%Temp%\Bonjour\vcredist2022_x64.exe" /passive /norestart
 start /wait "" "%Temp%\Bonjour\DirectX_Redist_Repack_x86_x64.exe" /y
 start /wait "" "%Temp%\Bonjour\.NET 9.0.exe" /install /quiet /norestart
 rd "%Temp%\Bonjour" /s /q >nul 2>&1
@@ -638,19 +635,21 @@ goto :END
 
 :END
 echo.===============================================================================
-echo.Lancer l'outil nettoyage de disque complet sur tous les disques (peu utile et cela peut prendre un certain temps) ?
-choice /C:YN /N /M "Run the full Disk Cleanup tool on all disks ? (not very useful and may take some time) ? ['Y'es/'N'o] : "
-if errorlevel 2 goto :END
-curl -s -L -o "%Temp%\sageset.reg" "https://github.com/Nyaldee/lain.bat/raw/main/call/sageset.reg"
-reg import "%Temp%\sageset.reg" >nul 2>&1 & del "%Temp%\sageset.reg"
-cleanmgr.exe /dc /sagerun:1
-
-:END
-echo.===============================================================================
 echo.Supprimer définitivement les sons Windows ?
 choice /C:YN /N /M "Remove Windows sounds permanently ? ['Y'es/'N'o] : "
 if errorlevel 2 goto :END
 reg delete "HKCU\AppEvents\Schemes\Apps" /f >nul 2>&1
+
+:END
+echo.===============================================================================
+echo.Restaurer le menu contextuel classique sur Windows 11 ?
+choice /C:YNR /N /M "Restore classic context menu in Windows 11 ? ['Y'es/'N'o/'R'eset] : "
+if errorlevel 3 (
+reg delete "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}" /f >nul 2>&1
+goto :END
+)
+if errorlevel 2 goto :END
+reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /ve /t REG_SZ /d "" /f >nul 2>&1
 
 :END
 echo.===============================================================================
@@ -697,14 +696,12 @@ ren "%WinDir%\System32\WaasMedicSvc.dll" "WaasMedicSvc.bak"
 
 :END
 echo.===============================================================================
-echo.Restaurer le menu contextuel classique sur Windows 11 ?
-choice /C:YNR /N /M "Restore classic context menu in Windows 11 ? ['Y'es/'N'o/'R'eset] : "
-if errorlevel 3 (
-reg delete "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}" /f >nul 2>&1
-goto :END
-)
+echo.Lancer l'outil nettoyage de disque complet sur tous les disques (peu utile et cela peut prendre un certain temps) ?
+choice /C:YN /N /M "Run the full Disk Cleanup tool on all disks ? (not very useful and may take some time) ? ['Y'es/'N'o] : "
 if errorlevel 2 goto :END
-reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /ve /t REG_SZ /d "" /f >nul 2>&1
+curl -s -L -o "%Temp%\sageset.reg" "https://github.com/Nyaldee/lain.bat/raw/main/call/sageset.reg"
+reg import "%Temp%\sageset.reg" >nul 2>&1 & del "%Temp%\sageset.reg"
+cleanmgr.exe /dc /sagerun:1
 
 :END
 echo.===============================================================================
