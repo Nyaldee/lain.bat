@@ -3,6 +3,7 @@ netsh dump > "%USERPROFILE%\Desktop\backup_netsh.txt"
 :: netsh -f "%USERPROFILE%\Desktop\backup_netsh.txt"
 netsh int ip reset >nul 2>&1
 netsh winsock reset >nul 2>&1
+netsh interface ip delete arpcache >nul 2>&1
 ipconfig /flushdns >nul 2>&1
 :: netsh advfirewall reset
 for %%I in ("Ethernet" "Ethernet 2" "Wi-Fi" "Wi-Fi 2" "WiFi" "WiFi 2" "Ethernet2" "Wi-Fi2") do (
@@ -17,6 +18,7 @@ powershell -Command "Disable-NetAdapterChecksumOffload -Name "*" -IpIPv4 -ErrorA
 powershell -Command "Disable-NetAdapterChecksumOffload -Name "*" -UdpIPv4 -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Disable-NetAdapterChecksumOffload -Name "*" -UdpIPv6 -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Disable-NetAdapterLso -Name "*" -ErrorAction SilentlyContinue | Out-Null"
+powershell -Command "Disable-NetAdapterRsc -Name "*" -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Set-NetAdapterAdvancedProperty -Name "*" -DisplayName 'Adaptive Inter-Frame Spacing' -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Set-NetAdapterAdvancedProperty -Name "*" -DisplayName 'Advanced EEE' -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Set-NetAdapterAdvancedProperty -Name "*" -DisplayName 'ARP Offload' -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null"
@@ -53,18 +55,27 @@ powershell -Command "Set-NetAdapterAdvancedProperty -Name "*" -DisplayName 'Wake
 powershell -Command "Set-NetAdapterAdvancedProperty -Name "*" -DisplayName 'Wake on magic packet when system is in the S0ix power state' -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Set-NetAdapterAdvancedProperty -Name "*" -DisplayName 'Shutdown Wake-On-Lan' -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Set-NetAdapterAdvancedProperty -Name "*" -DisplayName 'Wake on pattern match' -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null"
+::powershell Get-NetAdapterAdvancedProperty -Name "Ethernet 2"
 powershell -Command "Disable-NetAdapterBinding -Name '*' -AllBindings -ErrorAction SilentlyContinue | Out-Null"
-powershell -Command "Enable-NetAdapterBinding -Name '*' -ComponentID ms_pacer -ErrorAction SilentlyContinue | Out-Null"
+timeout /t 5 /nobreak >nul 2>&1
 powershell -Command "Enable-NetAdapterBinding -Name '*' -ComponentID ms_tcpip -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Enable-NetAdapterBinding -Name '*' -ComponentID ms_tcpip6 -ErrorAction SilentlyContinue | Out-Null"
+powershell -Command "Enable-NetAdapterBinding -Name '*' -ComponentID ms_pacer -ErrorAction SilentlyContinue | Out-Null"
+timeout /t 2 /nobreak >nul 2>&1
+powershell -Command "Enable-NetAdapterBinding -Name '*' -ComponentID ms_pacer -ErrorAction SilentlyContinue | Out-Null"
+timeout /t 1 /nobreak >nul 2>&1
+powershell -Command "Enable-NetAdapterBinding -Name '*' -ComponentID ms_pacer -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Get-WmiObject Win32_NetworkAdapterConfiguration | ForEach-Object { $_.SetTcpipNetbios(2) } -ErrorAction SilentlyContinue | Out-Null"
-(ipconfig /flushdns & ipconfig /release & ipconfig /renew) >nul 2>&1
-netsh interface ip delete arpcache >nul 2>&1
-netsh int tcp set global rsc=disabled ecn=enabled >nul 2>&1
-powershell -Command "Set-NetOffloadGlobalSetting -PacketCoalescingFilter disabled -ErrorAction SilentlyContinue | Out-Null"
-powershell -Command "Set-NetOffloadGlobalSetting -ReceiveSideScaling disabled -ErrorAction SilentlyContinue | Out-Null"
-powershell -Command "Set-NetOffloadGlobalSetting -ReceiveSegmentCoalescing disabled -ErrorAction SilentlyContinue | Out-Null"
+netsh int tcp set global dca=enabled rss=enabled rsc=disabled ecn=enabled >nul 2>&1
+netsh int tcp set global chimney=disabled timestamps=enabled uro=disabled >nul 2>&1
+netsh int tcp set global initialRto=2000 >nul 2>&1
+netsh int tcp set heuristics disabled >nul 2>&1
 netsh int tcp set supplemental template=Internet congestionprovider=DCTCP >nul 2>&1
+powershell -Command "Set-NetOffloadGlobalSetting -Chimney Disabled -PacketCoalescingFilter disabled -ReceiveSideScaling disabled -ReceiveSegmentCoalescing disabled -ErrorAction SilentlyContinue | Out-Null"
+powershell -Command "Set-NetTCPSetting -SettingName InternetCustom -InitialRto 2000 -ErrorAction SilentlyContinue | Out-Null"
+powershell -Command "Set-NetTCPSetting -SettingName InternetCustom -MinRto 300 -ErrorAction SilentlyContinue | Out-Null"
+::powershell Get-Help Set-NetOffloadGlobalSetting -Full
+(ipconfig /flushdns & ipconfig /release & ipconfig /renew) >nul 2>&1
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NetworkThrottlingIndex" /t REG_DWORD /d "4294967295" /f >nul 2>&1
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\NetBT\Parameters" /v EnableLMHOSTS /t REG_DWORD /d 0 /f >nul 2>&1
@@ -86,4 +97,6 @@ reg add "HKLM\SYSTEM\ControlSet001\Services\AFD\Parameters" /v "IgnoreOrderlyRel
 reg add "HKLM\SYSTEM\ControlSet001\Services\AFD\Parameters" /v "DisableAddressSharing" /t REG_DWORD /d "1" /f >nul 2>&1
 reg add "HKLM\SYSTEM\ControlSet001\Services\AFD\Parameters" /v "FastSendDatagramThreshold" /t REG_DWORD /d "1024" /f >nul 2>&1
 reg add "HKLM\SYSTEM\ControlSet001\Services\AFD\Parameters" /v "FastCopyReceiveThreshold" /t REG_DWORD /d "1024" /f >nul 2>&1
-pause
+::netsh int tcp show supplemental
+::netsh int tcp show heuristics
+::netsh int tcp show global
