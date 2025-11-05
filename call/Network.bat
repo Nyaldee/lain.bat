@@ -64,6 +64,7 @@ powershell -Command "Enable-NetAdapterBinding -Name '*' -ComponentID ms_pacer -E
 timeout /t 1 /nobreak >nul 2>&1
 powershell -Command "Enable-NetAdapterBinding -Name '*' -ComponentID ms_pacer -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Get-WmiObject Win32_NetworkAdapterConfiguration | ForEach-Object { $_.SetTcpipNetbios(2) } -ErrorAction SilentlyContinue | Out-Null"
+netsh int tcp set global autotuninglevel=normal
 netsh int tcp set global dca=enabled rss=enabled rsc=disabled ecn=enabled >nul 2>&1
 netsh int tcp set heuristics disabled >nul 2>&1
 netsh int tcp set supplemental template=Internet congestionprovider=DCTCP >nul 2>&1
@@ -95,6 +96,9 @@ reg add "HKLM\SYSTEM\ControlSet001\Services\AFD\Parameters" /v "IgnoreOrderlyRel
 reg add "HKLM\SYSTEM\ControlSet001\Services\AFD\Parameters" /v "DisableAddressSharing" /t REG_DWORD /d "1" /f >nul 2>&1
 reg add "HKLM\SYSTEM\ControlSet001\Services\AFD\Parameters" /v "FastSendDatagramThreshold" /t REG_DWORD /d "1024" /f >nul 2>&1
 reg add "HKLM\SYSTEM\ControlSet001\Services\AFD\Parameters" /v "FastCopyReceiveThreshold" /t REG_DWORD /d "1024" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpAckFrequency" /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TCPNoDelay" /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpDelAckTicks" /t REG_DWORD /d 0 /f >nul 2>&1
 ::netsh int tcp show supplemental
 ::netsh int tcp show heuristics
 ::netsh int tcp show global
