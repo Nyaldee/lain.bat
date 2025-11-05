@@ -6,10 +6,7 @@ netsh winsock reset >nul 2>&1
 netsh interface ip delete arpcache >nul 2>&1
 ipconfig /flushdns >nul 2>&1
 :: netsh advfirewall reset
-for %%I in ("Ethernet" "Ethernet 2" "Wi-Fi" "Wi-Fi 2" "WiFi" "WiFi 2" "Ethernet2" "Wi-Fi2") do (
-    netsh int ipv4 set dns name="%%I" static 1.1.1.1 primary validate=no >nul 2>&1
-    netsh int ipv4 add dns name="%%I" 1.0.0.1 index=2 >nul 2>&1
-)
+powershell -Command "Get-NetAdapter | Where-Object { $_.Status -eq 'Up' } | ForEach-Object { Set-DnsClientServerAddress -InterfaceIndex $_.InterfaceIndex -ServerAddresses ('1.1.1.1','1.0.0.1') -ErrorAction SilentlyContinue } | Out-Null"
 netsh advfirewall firewall set rule group="Network Discovery" new enable=No >nul 2>&1
 netsh advfirewall firewall set rule group="File and Printer Sharing" new enable=No >nul 2>&1
 netsh advfirewall set allprofiles firewallpolicy blockinbound,allowoutbound >nul 2>&1
@@ -67,10 +64,10 @@ timeout /t 1 /nobreak >nul 2>&1
 powershell -Command "Enable-NetAdapterBinding -Name '*' -ComponentID ms_pacer -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Get-WmiObject Win32_NetworkAdapterConfiguration | ForEach-Object { $_.SetTcpipNetbios(2) } -ErrorAction SilentlyContinue | Out-Null"
 netsh int tcp set global dca=enabled rss=enabled rsc=disabled ecn=enabled >nul 2>&1
-netsh int tcp set global chimney=disabled timestamps=enabled uro=disabled >nul 2>&1
-netsh int tcp set global initialRto=2000 >nul 2>&1
 netsh int tcp set heuristics disabled >nul 2>&1
 netsh int tcp set supplemental template=Internet congestionprovider=DCTCP >nul 2>&1
+netsh int tcp set global chimney=disabled timestamps=enabled uro=disabled >nul 2>&1
+netsh int tcp set global initialRto=2000 >nul 2>&1
 powershell -Command "Set-NetOffloadGlobalSetting -Chimney Disabled -PacketCoalescingFilter disabled -ReceiveSideScaling disabled -ReceiveSegmentCoalescing disabled -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Set-NetTCPSetting -SettingName InternetCustom -InitialRto 2000 -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Set-NetTCPSetting -SettingName InternetCustom -MinRto 300 -ErrorAction SilentlyContinue | Out-Null"
