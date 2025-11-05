@@ -2,8 +2,9 @@
 netsh dump > "%USERPROFILE%\Desktop\backup_netsh.txt"
 :: netsh -f "%USERPROFILE%\Desktop\backup_netsh.txt"
 netsh int ip reset >nul 2>&1
+netsh int ipv6 reset >nul 2>&1
 netsh winsock reset >nul 2>&1
-netsh interface ip delete arpcache >nul 2>&1
+netsh int ip delete arpcache >nul 2>&1
 ipconfig /flushdns >nul 2>&1
 :: netsh advfirewall reset
 powershell -Command "Get-NetAdapter | Where-Object { $_.Status -eq 'Up' } | ForEach-Object { Set-DnsClientServerAddress -InterfaceIndex $_.InterfaceIndex -ServerAddresses ('1.1.1.1','1.0.0.1') -ErrorAction SilentlyContinue } | Out-Null"
