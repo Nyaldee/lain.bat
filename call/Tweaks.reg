@@ -47,11 +47,16 @@ Windows Registry Editor Version 5.00
 "FastSendDatagramThreshold"=dword:00000400
 "FastCopyReceiveThreshold"=dword:00000400
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters]
+"EnableLMHOSTS"=dword:00000000
 [HKEY_LOCAL_MACHINE\System\ControlSet001\Control\Network\SharedAccessConnection]
 "EnableControl"=dword:00000000
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile]
 "NetworkThrottlingIndex"=dword:ffffffff
 "SystemResponsiveness"=dword:00000000
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters]
+"TcpAckFrequency"=dword:00000001
+"TCPNoDelay"=dword:00000001
+"TcpDelAckTicks"=dword:00000000
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NlaSvc\Parameters\Internet]
 "ActiveDnsProbeHost"="one.one.one.one"
 "ActiveDnsProbeContent"="1.1.1.1"
@@ -79,6 +84,8 @@ Windows Registry Editor Version 5.00
 "HighEfficiencyModeEnabled"=dword:00000001
 [-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run]
 [-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree\Microsoft\Windows\Windows Defender]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree\Microsoft\Windows\SyncCenter]
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\EventLog-System\{199fe037-2b82-40a9-82ac-e1d46c792b99}]
 "Enabled"=dword:00000000
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\EventLog-System\{1b562e86-b7aa-4131-badc-b6f3a001407e}]
@@ -214,6 +221,9 @@ Windows Registry Editor Version 5.00
 "ShowLockOption"=dword:00000000
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers]
 "HwSchMode"=dword:00000002
+"DisableAsyncShaderCompile"=dword:00000000
+"ShaderCacheMode"=dword:00000002
+"TdrDelay"=dword:00000010
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings]
 "VideoQualityOnBattery"=dword:00000001
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity]
@@ -344,7 +354,7 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\graphicsCaptureProgrammatic]
 "Value"="Allow"
 [HKEY_CURRENT_USER\Control Panel\International\User Profile]
-"HttpAcceptLanguageOptOut"=dword:00000001 
+"HttpAcceptLanguageOptOut"=dword:00000001
 [HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\EdgeUI]
 "DisableMFUTracking"=dword:00000001
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI]
