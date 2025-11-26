@@ -638,6 +638,7 @@ echo   [05] ⚡ Steam shortcut without a browser on desktop
 echo   [06] 🐺 LibreWolf
 echo   [07] ⚡ Run the full Disk Cleanup tool on all disks
 echo   [08] ⚡ ASCII Art
+echo   [09] ⚡ Making Valorant Work
 echo   [X]  ⚡ Back to menu / Retour
 echo.
 echo ════════════════════════════════════════════════════════════════
@@ -655,6 +656,11 @@ if "%choix%"=="5" goto Misc_5
 if "%choix%"=="6" start "" "https://librewolf.net/installation/windows/" & goto Misc_menu
 if "%choix%"=="7" goto Misc_7
 if "%choix%"=="8" goto Misc_8
+if "%choix%"=="9" (
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v HwSchMode /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v Enabled /t REG_DWORD /d 1 /f >nul 2>&1
+goto Misc_menu
+)
 
 echo Choix invalide / Invalid choice
 pause
