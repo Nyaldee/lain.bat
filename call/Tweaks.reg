@@ -85,7 +85,19 @@ Windows Registry Editor Version 5.00
 "BackgroundModeEnabled"=dword:00000000
 "HighEfficiencyModeEnabled"=dword:00000001
 [-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run]
-[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run]
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce]
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunNotification]
+[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run]
+[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\RunOnce]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunNotification]
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run]
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce]
+[HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run]
+[HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\RunOnce]
 [-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree\Microsoft\Windows\Windows Defender]
 [-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree\Microsoft\Windows\SyncCenter]
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\EventLog-System\{199fe037-2b82-40a9-82ac-e1d46c792b99}]
@@ -147,7 +159,6 @@ Windows Registry Editor Version 5.00
 "FSTextEffect"="0"
 "TextEffect"="0"
 "WindowsEffect"="0"
-
 [HKEY_CURRENT_USER\Control Panel\Accessibility\SlateLaunch]
 "ATapp"=""
 "LaunchAT"=dword:00000000
@@ -185,6 +196,8 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power]
 "HibernateEnabled"=dword:00000000
 "HibernateEnabledDefault"=dword:00000000
+"CoalescingTimerInterval"=dword:00000000
+"CsEnabled"=dword:00000000
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power]
 "HiberbootEnabled"=dword:00000000
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata]
@@ -286,7 +299,6 @@ Windows Registry Editor Version 5.00
 "LongPathsEnabled"=dword:00000001
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan]
 "DisableRemovableDriveScanning"=dword:00000001
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Spynet]
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
 "TaskbarMn"=dword:00000000
 "HideFileExt"=dword:00000000
@@ -372,7 +384,7 @@ Windows Registry Editor Version 5.00
 "AcceptedPrivacyPolicy"=dword:00000000
 [HKEY_CURRENT_USER\SOFTWARE\Microsoft\Siuf\Rules]
 "NumberOfSIUFInPeriod"=dword:00000000
-"PeriodInNanoSeconds"=- 
+"PeriodInNanoSeconds"=-
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System]
 "PublishUserActivities"=dword:00000000
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PushNotifications]
