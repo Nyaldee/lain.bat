@@ -1,6 +1,6 @@
 @echo off
-netsh dump > "%USERPROFILE%\Desktop\backup_netsh.txt"
-:: netsh -f "%USERPROFILE%\Desktop\backup_netsh.txt"
+netsh dump > "%USERPROFILE%\Desktop\Backup_Netsh.txt"
+:: netsh -f "%USERPROFILE%\Desktop\Backup_Netsh.txt"
 netsh int ip reset >nul 2>&1
 netsh int ipv6 reset >nul 2>&1
 netsh winsock reset >nul 2>&1
