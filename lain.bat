@@ -116,7 +116,7 @@ goto Option3
 :config1
 echo [ INITIALIZATION ] Please wait... A copy of the registry has been sent to the desktop
 reg export HKLM %Temp%\Temp_HKLM.reg >nul 2>&1 & reg export HKCU %Temp%\Temp_HKCU.reg >nul 2>&1 & reg export HKCR %Temp%\Temp_HKCR.reg >nul 2>&1
-copy /b %Temp%\Temp_HKLM.reg + %Temp%\Temp_HKCU.reg + %Temp%\Temp_HKCR.reg %USERPROFILE%\Desktop\Backup.reg >nul 2>&1
+copy /b %Temp%\Temp_HKLM.reg + %Temp%\Temp_HKCU.reg + %Temp%\Temp_HKCR.reg %USERPROFILE%\Desktop\Backup_Registry.reg >nul 2>&1
 del %Temp%\Temp_HKLM.reg & del %Temp%\Temp_HKCU.reg & del %Temp%\Temp_HKCR.reg
 chcp 437>nul
 bcdedit /set quietboot Yes >nul 2>&1
@@ -604,9 +604,23 @@ pause
 goto Services_menu
 
 :Services_1
+echo [ INITIALIZATION ] Please wait... A copy of the services has been sent to the desktop
+set "OUTPUT=%USERPROFILE%\Desktop\Backup_Services.bat"
+if not exist "%OUTPUT%" (
+echo @echo off>"%OUTPUT%"
+chcp 437>nul
+powershell -NoLogo -NoProfile -Command ^
+ "$s = Get-CimInstance Win32_Service | Where-Object { $_.Name -notmatch '_[A-Fa-f0-9]{4,}$' }; " ^
+ "foreach ($x in $s) { " ^
+ "  $mode = switch ($x.StartMode) { 'Auto'{'auto'} 'Manual'{'demand'} 'Disabled'{'disabled'} Default{'demand'} }; " ^
+ "  Add-Content '%OUTPUT%' ('sc config \"' + $x.Name + '\" start= ' + $mode + ' >nul 2>&1') " ^
+ "}"
+chcp 65001>nul
+)
 echo [ INITIALIZATION ] Please wait... The changes will take effect after a reboot
 curl -s -L -o "%Temp%\Disable services.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/DisableServices.bat"
 call "%Temp%\Disable services.bat" & del "%Temp%\Disable services.bat"
+pause
 goto Services_menu
 
 :Services_2
@@ -615,6 +629,17 @@ curl -s -L -o "%Temp%\PowerRun.exe" "https://github.com/Nyaldee/lain.bat/raw/mai
 curl -s -L -o "%Temp%\RestoreServices.reg" "https://github.com/Nyaldee/lain.bat/raw/main/call/RestoreServices.reg"
 %Temp%\PowerRun.exe Regedit.exe /S %Temp%\RestoreServices.reg
 del "%Temp%\PowerRun.exe" & del "%Temp%\RestoreServices.reg"
+sc config "UevAgentService" start= disabled >nul 2>&1
+sc config "tzautoupdate" start= disabled >nul 2>&1
+sc config "ssh-agent" start= disabled >nul 2>&1
+sc config "shpamsvc" start= disabled >nul 2>&1
+sc config "RemoteRegistry" start= disabled >nul 2>&1
+sc config "RemoteAccess" start= disabled >nul 2>&1
+sc config "WdiSystemHost" start= demand >nul 2>&1
+sc config "NetTcpPortSharing" start= disabled >nul 2>&1
+sc config "AppVClient" start= disabled >nul 2>&1
+sc config "DPS" start= auto >nul 2>&1
+sc config "TrkWks" start= auto >nul 2>&1
 goto Services_menu
 
 :Services_3
