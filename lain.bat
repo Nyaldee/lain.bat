@@ -62,7 +62,7 @@ echo   [01] ⚡ Create a restore point / Créer un point de restauration
 echo   [02] ⚡ Configure NVIDIA / Configuration NVIDIA
 echo   [03] ⚡ System Settings / Configuration globale
 echo   [04] ⚡ Network Settings / Paramètres réseau (not safe)
-echo   [05] ⚡ Power Plan (Desktop Only) / Plan d’alimentation (PC fixe uniquement)
+echo   [05] ⚡ Power Plan / Plan d’alimentation
 echo   [06] ⚡ Install Runtime ^& Frameworks / Installer les runtimes et frameworks
 echo   [07] ⚡ Install Timer Resolution Service / Installer le service Timer Resolution
 echo   [08] ⚡ Disable Unnecessary Services / Désactiver les services inutiles
@@ -142,6 +142,9 @@ dism /online /Disable-Feature /FeatureName:"Microsoft-Hyper-V-All" /Quiet /NoRes
 lodctr /r >nul 2>&1 && lodctr /r >nul 2>&1
 curl -s -L -o "%Temp%\Tweaks.reg" "https://github.com/Nyaldee/lain.bat/raw/main/call/Tweaks.reg"
 reg import "%Temp%\Tweaks.reg" >nul 2>&1 & del "%Temp%\Tweaks.reg"
+::schtasks /create /tn "\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTask" /xml "%SystemRoot%\System32\Tasks\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTask" /f
+::schtasks /create /tn "\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTaskNetwork" /xml "%SystemRoot%\System32\Tasks\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTaskNetwork" /f
+::schtasks /create /tn "\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTaskLogon" /xml "%SystemRoot%\System32\Tasks\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTaskLogon" /f
 ::takeown /F "C:\Windows\System32\Tasks\Microsoft\Windows\SoftwareProtectionPlatform" /A /R
 ::icacls "C:\Windows\System32\Tasks\Microsoft\Windows\SoftwareProtectionPlatform" /grant "NETWORK SERVICE":(F) /T
 ::schtasks /create /tn "Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTask" /tr "sc start sppsvc" /sc daily /ru "NETWORK SERVICE" /f
@@ -198,14 +201,15 @@ call "%Temp%\Network.bat" & del "%Temp%\Network.bat"
 goto Main_menu
 
 :Option5
-echo. Optimiser et activer le plan d'alimentation Ultimate Performance ?
-echo. Optimize and activate the Ultimate Performance power plan ? 
-set /p choix="['Y'es/'N'o/'K'eep Balanced/'R'eset] :"
+echo. Optimiser le plan d'alimentation ?
+echo. Optimize the power power plan ? 
+set /p choix="['Y'es/'N'o/'E'co/'K'eep Balanced/'R'eset] :"
 
 if /i "%choix%"=="n" goto Main_menu
 if /i "%choix%"=="y" goto Power_1
-if /i "%choix%"=="k" goto Power_2
-if /i "%choix%"=="r" goto Power_3
+if /i "%choix%"=="e" goto Power_2
+if /i "%choix%"=="k" goto Power_3
+if /i "%choix%"=="r" goto Power_4
 
 echo Choix invalide / Invalid choice
 pause
@@ -218,6 +222,13 @@ pause
 goto Main_menu
 
 :Power_2
+curl -s -L -o "%Temp%\PowerPlan.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/TweaksBattery.bat"
+call "%Temp%\TweaksBattery.bat" & del "%Temp%\TweaksBattery.bat"
+powercfg /list
+pause
+goto Main_menu
+
+:Power_3
 powercfg -restoredefaultschemes >nul 2>&1
 powercfg -duplicatescheme 381b4222-f694-41f0-9685-ff5bb260df2e 77777777-7777-7777-7777-777777777777 >nul 2>&1
 powercfg -setactive "77777777-7777-7777-7777-777777777777" >nul 2>&1
@@ -230,7 +241,7 @@ powercfg /list
 pause
 goto Main_menu
 
-:Power_3
+:Power_4
 powercfg -restoredefaultschemes >nul 2>&1
 powercfg /hibernate on >nul 2>&1
 powercfg /list
@@ -625,10 +636,8 @@ goto Services_menu
 
 :Services_2
 echo [ INITIALIZATION ] Please wait... The changes will take effect after a reboot
-curl -s -L -o "%Temp%\PowerRun.exe" "https://github.com/Nyaldee/lain.bat/raw/main/call/PowerRun.exe"
 curl -s -L -o "%Temp%\RestoreServices.reg" "https://github.com/Nyaldee/lain.bat/raw/main/call/RestoreServices.reg"
-%Temp%\PowerRun.exe Regedit.exe /S %Temp%\RestoreServices.reg
-del "%Temp%\PowerRun.exe" & del "%Temp%\RestoreServices.reg"
+reg import "%Temp%\RestoreServices.reg" >nul 2>&1 & del "%Temp%\RestoreServices.reg"
 sc config "UevAgentService" start= disabled >nul 2>&1
 sc config "tzautoupdate" start= disabled >nul 2>&1
 sc config "ssh-agent" start= disabled >nul 2>&1
