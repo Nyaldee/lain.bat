@@ -58,3 +58,4 @@ reg add "HKLM\SOFTWARE\Classes\LibreWolfURL" /v "Content Type" /d "application/x
 reg add "HKLM\SOFTWARE\Classes\LibreWolfURL\DefaultIcon" /ve /d "%st3Path%,0" /f >nul 2>&1
 
 reg add "HKLM\SOFTWARE\Classes\LibreWolfURL\shell\open\command" /ve /d "\"%st3Path%\" \"%%1\"" /f >nul 2>&1
+start ms-settings:defaultapps
