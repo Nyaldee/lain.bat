@@ -41,7 +41,7 @@ echo Back up your files and create a restore point beforehand.
 echo ══════════════════════════════════════════════════════════════════════════════════════════
 echo Bios optimization :
 echo  ► ENABLE : Re-Size BAR Support/4G Decoding, Precision Boost Overdrive, EXPO/XMP profile,
-echo L1/L2 Prefetcher, CPPC/CPPC Preferred
+echo L1/L2 Prefetcher, CPPC/CPPC Preferred, SMT
 echo  ► DISABLE : Internal Graphics, SVM/VMX Mode, Drivers Software, CSM Support,
 echo Fastboot, High Precision Event Timer (?)
 echo  ► CAUTION/NONE : Global C-state Control, ACPI_CST C1 Declaration
@@ -166,7 +166,7 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "T
 ::curl -s -L -o "%Temp%\User Account Pictures.zip" "https://github.com/Nyaldee/lain.bat/raw/main/call/UserAccountPictures.zip"
 powershell -Command "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force"
 powershell -Command "Get-PnpDevice | Where-Object FriendlyName -like 'Remote Desktop Device Redirector Bus*' | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue | Out-Null"
-powershell -Command "Get-PnpDevice | Where-Object { $_.FriendlyName -like 'Composite Bus Enumerator*' -or $_.FriendlyName -like 'High precision event timer*' -or $_.FriendlyName -like 'UMBus Root Bus Enumerator*' -or $_.FriendlyName -like 'Numeric data processor*' -or $_.FriendlyName -like 'SM Bus Controller*' -or $_.FriendlyName -like 'Microsoft GS Wavetable Synth*' -or $_.FriendlyName -like 'Microsoft Virtual Drive Enumerator*' -or $_.FriendlyName -like 'System speaker*' -or $_.FriendlyName -like 'System timer*' } | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue | Out-Null"
+powershell -Command "Get-PnpDevice | Where-Object { $_.FriendlyName -like 'Composite Bus Enumerator*' -or $_.FriendlyName -like 'High precision event timer*' -or $_.FriendlyName -like 'Microsoft Hyper-V Virtualization Infrastructure Driver*' -or $_.FriendlyName -like 'Microsoft Virtual Drive Enumerator*' -or $_.FriendlyName -like 'NDIS Virtual Network Adapter Enumerator*' -or $_.FriendlyName -like 'Numeric data processor*' -or $_.FriendlyName -like 'SM Bus Controller*' -or $_.FriendlyName -like 'Microsoft GS Wavetable Synth*' -or $_.FriendlyName -like 'System speaker*' -or $_.FriendlyName -like 'System timer*' -or $_.FriendlyName -like 'UMBus Root Bus Enumerator*' } | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Get-WmiObject MSPower_DeviceEnable -Namespace root\wmi | ForEach-Object { $_.enable = $false; $_.psbase.put() } > $null"
 ::powershell -Command "Expand-Archive -Path '%Temp%\User Account Pictures.zip' -DestinationPath '%ProgramData%\Microsoft\User Account Pictures' -Force"
 chcp 65001>nul
