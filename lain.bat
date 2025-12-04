@@ -124,12 +124,15 @@ del %Temp%\Temp_HKLM.reg & del %Temp%\Temp_HKCU.reg & del %Temp%\Temp_HKCR.reg
 chcp 437>nul
 bcdedit /set quietboot Yes >nul 2>&1
 bcdedit /set bootuxdisabled On >nul 2>&1
-bcdedit /set disabledynamictick Yes >nul 2>&1
-bcdedit /set useplatformtick Yes >nul 2>&1
 bcdedit /set tscsyncpolicy enhanced >nul 2>&1
 bcdedit /set uselegacyapicmode No >nul 2>&1
 bcdedit /set usephysicaldestination No >nul 2>&1
+bcdedit /set disabledynamictick Yes >nul 2>&1
 bcdedit /deletevalue useplatformclock >nul 2>&1
+bcdedit /deletevalue useplatformtick >nul 2>&1
+::bcdedit /set spectremitigation disabled >nul 2>&1
+::bcdedit /set mitigations off >nul 2>&1
+::bcdedit /set usefirmwarepcisettings false >nul 2>&1
 ::bcdedit /enum
 dism /online /Disable-Feature /FeatureName:"Windows-Defender-ApplicationGuard" /Quiet /NoRestart >nul 2>&1
 dism /online /Disable-Feature /FeatureName:"VirtualMachinePlatform" /Quiet /NoRestart >nul 2>&1
@@ -163,7 +166,7 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "T
 ::curl -s -L -o "%Temp%\User Account Pictures.zip" "https://github.com/Nyaldee/lain.bat/raw/main/call/UserAccountPictures.zip"
 powershell -Command "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force"
 powershell -Command "Get-PnpDevice | Where-Object FriendlyName -like 'Remote Desktop Device Redirector Bus*' | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue | Out-Null"
-powershell -Command "Get-PnpDevice | Where-Object { $_.FriendlyName -like 'Composite Bus Enumerator*' -or $_.FriendlyName -like 'High precision event timer*' -or $_.FriendlyName -like 'UMBus Root Bus Enumerator*' -or $_.FriendlyName -like 'Numeric data processor*' -or $_.FriendlyName -like 'SM Bus Controller*' -or $_.FriendlyName -like 'Microsoft GS Wavetable Synth*' -or $_.FriendlyName -like 'Microsoft Virtual Drive Enumerator*' -or $_.FriendlyName -like 'System speaker*' } | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue | Out-Null"
+powershell -Command "Get-PnpDevice | Where-Object { $_.FriendlyName -like 'Composite Bus Enumerator*' -or $_.FriendlyName -like 'High precision event timer*' -or $_.FriendlyName -like 'UMBus Root Bus Enumerator*' -or $_.FriendlyName -like 'Numeric data processor*' -or $_.FriendlyName -like 'SM Bus Controller*' -or $_.FriendlyName -like 'Microsoft GS Wavetable Synth*' -or $_.FriendlyName -like 'Microsoft Virtual Drive Enumerator*' -or $_.FriendlyName -like 'System speaker*' -or $_.FriendlyName -like 'System timer*' } | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue | Out-Null"
 powershell -Command "Get-WmiObject MSPower_DeviceEnable -Namespace root\wmi | ForEach-Object { $_.enable = $false; $_.psbase.put() } > $null"
 ::powershell -Command "Expand-Archive -Path '%Temp%\User Account Pictures.zip' -DestinationPath '%ProgramData%\Microsoft\User Account Pictures' -Force"
 chcp 65001>nul
