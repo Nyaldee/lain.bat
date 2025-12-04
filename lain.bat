@@ -463,9 +463,9 @@ echo Choix invalide / Invalid choice
 pause
 goto Option13
 :disablewu1
-net stop "UsoSvc" /y >nul 2>&1 & sc config "UsoSvc" start= Disabled >nul 2>&1
-net stop "wuauserv" /y >nul 2>&1 & sc config "wuauserv" start= Disabled >nul 2>&1
-net stop "WaaSMedicSvc" /y >nul 2>&1 & sc config "WaaSMedicSvc" start= Disabled >nul 2>&1
+net stop "UsoSvc" /y >nul 2>&1 & sc config "UsoSvc" start= disabled >nul 2>&1
+net stop "wuauserv" /y >nul 2>&1 & sc config "wuauserv" start= disabled >nul 2>&1
+net stop "WaaSMedicSvc" /y >nul 2>&1 & sc config "WaaSMedicSvc" start= disabled >nul 2>&1
 takeown /F "%SystemRoot%\System32\wuaueng.dll" >nul 2>&1
 icacls "%SystemRoot%\System32\wuaueng.dll" /grant:r %username%:F >nul 2>&1
 ren "%SystemRoot%\System32\wuaueng.dll" "wuaueng.bak"
@@ -479,9 +479,9 @@ takeown /F "%SystemRoot%\System32\wuaueng.bak" >nul 2>&1
 ren "%SystemRoot%\System32\wuaueng.bak" "wuaueng.dll"
 takeown /F "%SystemRoot%\System32\WaasMedicSvc.bak" >nul 2>&1
 ren "%SystemRoot%\System32\WaasMedicSvc.bak" "WaasMedicSvc.dll"
-net stop "UsoSvc" /y >nul 2>&1 & sc config "UsoSvc" start= Demand >nul 2>&1
-net start "wuauserv" & sc config "wuauserv" start= Demand
-net start "WaaSMedicSvc" & sc config "WaaSMedicSvc" start= Demand
+net stop "UsoSvc" /y >nul 2>&1 & sc config "UsoSvc" start= demand >nul 2>&1
+net start "wuauserv" & sc config "wuauserv" start= demand
+net start "WaaSMedicSvc" & sc config "WaaSMedicSvc" start= demand
 goto Main_menu
 
 :: --- MENU NVIDIA --------------------------------------------------------------
@@ -716,7 +716,7 @@ if "%choix%"=="2" goto Misc_2
 if "%choix%"=="3" goto Misc_3
 if "%choix%"=="4" goto Misc_4
 if "%choix%"=="5" goto Misc_5
-if "%choix%"=="6" start "" "https://librewolf.net/installation/windows/" & goto Misc_menu
+if "%choix%"=="6" goto Misc_6
 if "%choix%"=="7" goto Misc_7
 if "%choix%"=="8" goto Misc_8
 if "%choix%"=="9" (
@@ -761,6 +761,24 @@ goto Misc_menu
 chcp 437>nul
 powershell -Command "$s=(New-Object -COM WScript.Shell).CreateShortcut('%USERPROFILE%\Desktop\Steam - No browser.lnk'); $s.TargetPath='C:\Program Files (x86)\Steam\Steam.exe'; $s.Arguments='silent -noverifyfiles -no-browser +open steam://open/minigameslist'; $s.Save()"
 chcp 65001>nul
+goto Misc_menu
+
+:Misc_6
+start "" "https://librewolf.net/installation/windows/"
+curl -s -L -o "%USERPROFILE%\Desktop\LibreWolf Register.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/LibreWolfRegister.bat"
+echo. Settings for normal use
+echo. • Disable :
+echo.    delete cookie when closed
+echo.    Enable ResistFingerprinting
+echo.    Support LibreWolf
+echo. • Enable :
+echo.    Fix major site issues (recommended)
+echo.    Fix minor site issues
+echo.    Enable WebGL
+echo.
+echo. Register LibreWolf Portable :
+echo. Move the LibreWolf Register.bat file from your desktop to the folder containing LibreWolf-Portable.exe, then run it.
+pause
 goto Misc_menu
 
 :Misc_7
