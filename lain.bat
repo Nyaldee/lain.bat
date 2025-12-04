@@ -68,10 +68,11 @@ echo   [07] ⚡ Install Timer Resolution Service / Installer le service Timer Re
 echo   [08] ⚡ Disable Unnecessary Services / Désactiver les services inutiles
 echo   [09] ⚡ Disable SmartScreen ^& Block Edge / Désactiver SmartScreen et bloquer Edge
 echo   [10] ⚡ Disable Bluetooth drivers and services
-echo   [11] ⚡ Block Tracking ^& Spyware IPs / Bloquer les IPs d’espionnage et de suivi
-echo   [12] ⚡ Disable Windows Update / Désactiver Windows Update
-echo   [13] ⚡ Miscellaneous / Divers
-echo   [14] ⚡ Review Windows Settings / Vérifier les paramètres Windows
+echo   [11] ⚡ Disable Wifi drivers and services
+echo   [12] ⚡ Block Tracking ^& Spyware IPs / Bloquer les IPs d’espionnage et de suivi
+echo   [13] ⚡ Disable Windows Update / Désactiver Windows Update
+echo   [14] ⚡ Miscellaneous / Divers
+echo   [15] ⚡ Review Windows Settings / Vérifier les paramètres Windows
 echo.
 set /p choix="Choisissez une option / Choose an option :"
 
@@ -90,8 +91,9 @@ if "%choix%"=="9" goto Option9
 if "%choix%"=="10" goto Option10
 if "%choix%"=="11" goto Option11
 if "%choix%"=="12" goto Option12
-if "%choix%"=="13" goto Misc_menu
-if "%choix%"=="14" goto Check_menu
+if "%choix%"=="13" goto Option13
+if "%choix%"=="14" goto Misc_menu
+if "%choix%"=="15" goto Check_menu
 
 echo Choix invalide / Invalid choice
 pause
@@ -99,6 +101,7 @@ goto Main_menu
 
 :: --- ACTIONS MENU PRINCIPAL ---------------------------------------------------
 :Option1
+::(net start "VSS" /y & sc config "SENS" start= demand) >nul 2>&1
 "%SystemRoot%\System32\SystemPropertiesProtection.exe"
 goto Main_menu
 
@@ -367,8 +370,8 @@ echo Choix invalide / Invalid choice
 pause
 goto Option10
 :disablebt1
-net stop "bthserv" /y >nul 2>&1 & sc config "bthserv" start= Disabled >nul 2>&1
-net stop "BTAGService" /y >nul 2>&1 & sc config "BTAGService" start= Disabled >nul 2>&1
+net stop "bthserv" /y >nul 2>&1 & sc config "bthserv" start= disabled >nul 2>&1
+net stop "BTAGService" /y >nul 2>&1 & sc config "BTAGService" start= disabled >nul 2>&1
 chcp 437>nul
 powershell -Command "& { Get-PnpDevice -Class 'Net' | Where-Object { $_.FriendlyName -like '*Bluetooth*' } | ForEach-Object { Disable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"
 powershell -Command "& { Get-PnpDevice -Class 'Bluetooth' | Where-Object { $_.FriendlyName -like '*Bluetooth*' } | ForEach-Object { Disable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"
@@ -376,8 +379,8 @@ chcp 65001>nul
 goto Main_menu
 
 :disablebt2
-net start "bthserv" >nul 2>&1 & sc config "bthserv" start= Demand >nul 2>&1
-net start "BTAGService" >nul 2>&1 & sc config "BTAGService" start= Demand >nul 2>&1
+net start "bthserv" >nul 2>&1 & sc config "bthserv" start= demand >nul 2>&1
+net start "BTAGService" >nul 2>&1 & sc config "BTAGService" start= demand >nul 2>&1
 chcp 437>nul
 powershell -Command "& { Get-PnpDevice -Class 'Net' | Where-Object { $_.FriendlyName -like '*Bluetooth*' } | ForEach-Object { Enable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"
 powershell -Command "& { Get-PnpDevice -Class 'Bluetooth' | Where-Object { $_.FriendlyName -like '*Bluetooth*' } | ForEach-Object { Enable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"
@@ -385,6 +388,32 @@ chcp 65001>nul
 goto Main_menu
 
 :Option11
+echo. Désactiver les drivers et services Wifi ?
+echo. Disable Wifi drivers and services ?
+set /p choix="['Y'es/'N'o/'R'eset] :"
+
+if /i "%choix%"=="n" goto Main_menu
+if /i "%choix%"=="y" goto disablewifi1
+if /i "%choix%"=="r" goto disablewifi2
+
+echo Choix invalide / Invalid choice
+pause
+goto Option11
+:disablewifi1
+net stop "WlanSvc" /y >nul 2>&1 & sc config "WlanSvc" start= disabled >nul 2>&1
+chcp 437>nul
+powershell -Command "& { Get-PnpDevice -Class 'Net' | Where-Object { $_.FriendlyName -like '*Wi-Fi*' -or $_.FriendlyName -like '*Wireless*' } | ForEach-Object { Disable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"
+chcp 65001>nul
+goto Main_menu
+
+:disablewifi2
+net start "WlanSvc" >nul 2>&1 & sc config "WlanSvc" start= auto >nul 2>&1
+chcp 437>nul
+powershell -Command "& { Get-PnpDevice -Class 'Net' | Where-Object { $_.FriendlyName -like '*Wi-Fi*' -or $_.FriendlyName -like '*Wireless*' } | ForEach-Object { Enable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"
+chcp 65001>nul
+goto Main_menu
+
+:Option12
 echo. Bloquer l'espionnage et le suivi des IPs (via WindowsSpyBlocker et le fichier host) ? Vous ne recevrez plus les majs Windows
 echo. Block spying and tracking IPs (via WindowsSpyBlocker and host file) ? You will no longer receive Windows updates
 set /p choix="['Y'es/'N'o/'R'eset/'C'lean all] :"
@@ -396,7 +425,7 @@ if /i "%choix%"=="c" goto disablespy3
 
 echo Choix invalide / Invalid choice
 pause
-goto Option11
+goto Option12
 :disablespy1
 curl -s -L -o "%Temp%\CustomHostsAdd.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/CustomHostsAdd.bat"
 call "%Temp%\CustomHostsAdd.bat" & del "%Temp%\CustomHostsAdd.bat"
@@ -421,7 +450,7 @@ echo # ::1             localhost
 ) > %SystemRoot%\System32\drivers\etc\hosts
 goto Main_menu
 
-:Option12
+:Option13
 echo. Désactiver Windows Update ?
 echo. Disable Windows Update ?
 set /p choix="['Y'es/'N'o/'R'eset] :"
@@ -432,7 +461,7 @@ if /i "%choix%"=="r" goto disablewu2
 
 echo Choix invalide / Invalid choice
 pause
-goto Option11
+goto Option13
 :disablewu1
 net stop "UsoSvc" /y >nul 2>&1 & sc config "UsoSvc" start= Disabled >nul 2>&1
 net stop "wuauserv" /y >nul 2>&1 & sc config "wuauserv" start= Disabled >nul 2>&1
