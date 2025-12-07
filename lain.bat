@@ -648,7 +648,7 @@ goto Services_menu
 
 :Services_1
 echo [ INITIALIZATION ] Please wait... A copy of the services has been sent to the desktop
-set "OUTPUT=%USERPROFILE%\Desktop\Backup_Services.bat"
+set "OUTPUT=%USERPROFILE%\Desktop\Backup Services.bat"
 if not exist "%OUTPUT%" (
 echo @echo off>"%OUTPUT%"
 chcp 437>nul
@@ -774,9 +774,11 @@ echo. • Disable :
 echo.    delete cookie when closed
 echo.    Enable ResistFingerprinting
 echo.    Support LibreWolf
+echo.    Enforce OCSP hard-fail (?)
 echo. • Enable :
 echo.    Fix major site issues (recommended)
 echo.    Fix minor site issues
+echo.    Open previous windows and tabs (?)
 echo.    Enable WebGL
 echo.
 echo. Register LibreWolf Portable :
