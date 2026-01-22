@@ -99,7 +99,7 @@ echo Choix invalide / Invalid choice
 pause
 goto Main_menu
 
-:: --- ACTIONS MENU PRINCIPAL ---------------------------------------------------
+:: --- MENU PRINCIPAL ---------------------------------------------------
 :Option1
 ::(net start "VSS" /y & sc config "SENS" start= demand) >nul 2>&1
 "%SystemRoot%\System32\SystemPropertiesProtection.exe"
@@ -203,7 +203,9 @@ goto Option4
 :Network
 echo [ INITIALIZATION ] Please wait... Keep your hands up
 curl -s -L -o "%Temp%\Network.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/Network.bat"
+chcp 437>nul
 call "%Temp%\Network.bat" & del "%Temp%\Network.bat"
+chcp 65001>nul
 goto Main_menu
 
 :Option5
@@ -278,8 +280,8 @@ curl -s -L -o "%Temp%\Bonjour\vcredist2010_x86.exe" "https://download.microsoft.
 curl -s -L -o "%Temp%\Bonjour\vcredist2010_x64.exe" "https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x64.exe"
 curl -s -L -o "%Temp%\Bonjour\vcredist2012_x86.exe" "https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x86.exe"
 curl -s -L -o "%Temp%\Bonjour\vcredist2012_x64.exe" "https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe"
-curl -s -L -o "%Temp%\Bonjour\vcredist2013_x86.exe" "https://aka.ms/highdpimfc2013x86enu"
-curl -s -L -o "%Temp%\Bonjour\vcredist2013_x64.exe" "https://aka.ms/highdpimfc2013x64enu"
+curl -s -L -o "%Temp%\Bonjour\vcredist2013_x86.exe" "https://download.microsoft.com/download/2/e/6/2e61cfa4-993b-4dd4-91da-3737cd5cd6e3/vcredist_x86.exe"
+curl -s -L -o "%Temp%\Bonjour\vcredist2013_x64.exe" "https://download.microsoft.com/download/2/e/6/2e61cfa4-993b-4dd4-91da-3737cd5cd6e3/vcredist_x64.exe"
 curl -s -L -o "%Temp%\Bonjour\vcredist2022_x86.exe" "https://aka.ms/vs/17/release/vc_redist.x86.exe"
 curl -s -L -o "%Temp%\Bonjour\vcredist2022_x64.exe" "https://aka.ms/vs/17/release/vc_redist.x64.exe"
 start /wait "" "%Temp%\Bonjour\vcredist2005_x86.exe" /q
@@ -668,19 +670,9 @@ goto Services_menu
 
 :Services_2
 echo [ INITIALIZATION ] Please wait... The changes will take effect after a reboot
-curl -s -L -o "%Temp%\RestoreServices.reg" "https://github.com/Nyaldee/lain.bat/raw/main/call/RestoreServices.reg"
-reg import "%Temp%\RestoreServices.reg" >nul 2>&1 & del "%Temp%\RestoreServices.reg"
-sc config "UevAgentService" start= disabled >nul 2>&1
-sc config "tzautoupdate" start= disabled >nul 2>&1
-sc config "ssh-agent" start= disabled >nul 2>&1
-sc config "shpamsvc" start= disabled >nul 2>&1
-sc config "RemoteRegistry" start= disabled >nul 2>&1
-sc config "RemoteAccess" start= disabled >nul 2>&1
-sc config "WdiSystemHost" start= demand >nul 2>&1
-sc config "NetTcpPortSharing" start= disabled >nul 2>&1
-sc config "AppVClient" start= disabled >nul 2>&1
-sc config "DPS" start= auto >nul 2>&1
-sc config "TrkWks" start= auto >nul 2>&1
+curl -s -L -o "%Temp%\RestoreServices.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/RestoreServices.bat"
+call "%Temp%\Disable services.bat" & del "%Temp%\Disable services.bat"
+pause
 goto Services_menu
 
 :Services_3
@@ -698,13 +690,14 @@ echo ╚════════════════════════
 echo.
 echo   [01] ⚡ Remove Windows sounds permanently
 echo   [02] ⚡ Restore classic context menu
-echo   [03] ⚡ Remove Microsoft Edge
-echo   [04] ⚡ Uninstall pre-installed applications
-echo   [05] ⚡ Steam shortcut without a browser on desktop
-echo   [06] 🐺 LibreWolf
-echo   [07] ⚡ Run the full Disk Cleanup tool on all disks
-echo   [08] ⚡ ASCII Art
-echo   [09] ⚡ Making Valorant Work
+echo   [03] ⚡ Remove AI shit
+echo   [04] ⚡ Remove Microsoft Edge
+echo   [05] ⚡ Uninstall pre-installed applications
+echo   [06] ⚡ Steam shortcut without a browser on desktop
+echo   [07] 🐺 LibreWolf
+echo   [08] ⚡ Run the full Disk Cleanup tool on all disks
+echo   [09] ⚡ ASCII Art
+echo   [10]⚡ Making Valorant Work
 echo   [X]  ⚡ Back to menu / Retour
 echo.
 echo ════════════════════════════════════════════════════════════════
@@ -722,7 +715,8 @@ if "%choix%"=="5" goto Misc_5
 if "%choix%"=="6" goto Misc_6
 if "%choix%"=="7" goto Misc_7
 if "%choix%"=="8" goto Misc_8
-if "%choix%"=="9" (
+if "%choix%"=="9" goto Misc_9
+if "%choix%"=="10" (
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v HwSchMode /t REG_DWORD /d 1 /f >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v Enabled /t REG_DWORD /d 1 /f >nul 2>&1
 goto Misc_menu
@@ -745,28 +739,36 @@ pause
 goto Misc_2
 
 :Misc_3
+:: https://github.com/zoicware/RemoveWindowsAI
+chcp 437>nul
+powershell -Command "& ([scriptblock]::Create((irm 'https://kutt.it/RWAI')))"
+chcp 65001>nul
+goto Misc_menu
+
+:Misc_4
 :: https://github.com/he3als/EdgeRemover
 chcp 437>nul
 powershell -Command "iex(irm https://cdn.jsdelivr.net/gh/he3als/EdgeRemover@main/get.ps1)"
 chcp 65001>nul
 goto Misc_menu
 
-:Misc_4
+:Misc_5
 %SystemRoot%\System32\OneDriveSetup.exe /uninstall >nul 2>&1
 dism /online /Remove-Capability /CapabilityName:Microsoft.Windows.MSPaint~~~~0.0.1.0 /Quiet /NoRestart >nul 2>&1
 dism /online /Remove-Capability /CapabilityName:Microsoft.Windows.SnippingTool~~~~0.0.1.0 /Quiet /NoRestart >nul 2>&1
+dism /online /Remove-Capability /CapabilityName:Media.WindowsMediaPlayer~~~~0.0.12.0 /Quiet /NoRestart >nul 2>&1
 chcp 437>nul
 Powershell Get-AppxPackage -AllUsers ^*OutlookForWindows^* ^| Remove-AppxPackage -AllUsers -ErrorAction Continue
 chcp 65001>nul
 goto Misc_menu
 
-:Misc_5
+:Misc_6
 chcp 437>nul
 powershell -Command "$s=(New-Object -COM WScript.Shell).CreateShortcut('%USERPROFILE%\Desktop\Steam - No browser.lnk'); $s.TargetPath='C:\Program Files (x86)\Steam\Steam.exe'; $s.Arguments='silent -noverifyfiles -no-browser +open steam://open/minigameslist'; $s.Save()"
 chcp 65001>nul
 goto Misc_menu
 
-:Misc_6
+:Misc_7
 start "" "https://librewolf.net/installation/windows/"
 curl -s -L -o "%USERPROFILE%\Desktop\LibreWolf Register.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/LibreWolfRegister.bat"
 echo. Settings for normal use
@@ -786,13 +788,13 @@ echo. Move the LibreWolf Register.bat file from your desktop to the folder conta
 pause
 goto Misc_menu
 
-:Misc_7
+:Misc_8
 curl -s -L -o "%Temp%\sageset.reg" "https://github.com/Nyaldee/lain.bat/raw/main/call/sageset.reg"
 reg import "%Temp%\sageset.reg" >nul 2>&1 & del "%Temp%\sageset.reg"
 cleanmgr.exe /dc /sagerun:1
 goto Misc_menu
 
-:Misc_8
+:Misc_9
 cls
 echo. ⠀⠀⠀⠀⠀⠀⠀⠄⣀⠢⢀⣤⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⡔⢀⠂⡜⢭⢻⣍⢯⡻⣝⣿⣿⡿⣟⠂
 echo. ⠀⠀⠀⠀⠀⠀⠀⠄⠀⣦⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡔⡀⢂⠜⣪⢗⡾⣶⡽⣾⣟⣯⠛⠀⠀
