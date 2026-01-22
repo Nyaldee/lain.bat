@@ -301,8 +301,10 @@ rd "%ProgramFiles%\dotnet" /s /q >nul 2>&1
 rd "%LocalAppData%\Microsoft\dotnet" /s /q >nul 2>&1
 chcp 437>nul
 powershell -ExecutionPolicy Bypass -File "%Temp%\Bonjour\dotnet-install.ps1" -Runtime dotnet -InstallDir "C:\Program Files\dotnet" >nul 2>&1
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$p='C:\Program Files\dotnet';$k='Machine';$v=[Environment]::GetEnvironmentVariable('Path',$k);if($v -notlike '*'+$p+'*'){[Environment]::SetEnvironmentVariable('Path',($v.TrimEnd(';')+';'+$p),$k)}" >nul 2>&1
 chcp 65001>nul
-setx PATH "%PATH%;C:\Program Files\dotnet\" >nul
+:: where dotnet
+:: setx PATH "%PATH%;C:\Program Files\dotnet\" >nul 2>&1
 del "%USERPROFILE%\dotnet-install.ps1" /f /q >nul 2>&1
 rd "%Temp%\Bonjour" /s /q >nul 2>&1
 goto Main_menu
