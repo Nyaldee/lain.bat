@@ -271,6 +271,7 @@ dism /online /Enable-Feature /FeatureName:NetFx4-AdvSrvs /All /NoRestart >nul 2>
 md "%Temp%\Bonjour" >nul 2>&1
 curl -s -L -o "%Temp%\Bonjour\DirectX_Redist_Repack_x86_x64.zip" "https://github.com/stdin82/htfx/releases/download/v0.0.4/DirectX_Redist_Repack_x86_x64_v3.zip"
 tar -xf "%Temp%\Bonjour\DirectX_Redist_Repack_x86_x64.zip" -C "%Temp%\Bonjour"
+curl -s -L -o "%Temp%\Bonjour\windowsdesktop-runtime-7.0.20-win-x64.exe" "https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/7.0.20/windowsdesktop-runtime-7.0.20-win-x64.exe"
 curl -s -L -o "%Temp%\Bonjour\dotnet-install.ps1" "https://dot.net/v1/dotnet-install.ps1"
 curl -s -L -o "%Temp%\Bonjour\vcredist2005_x86.exe" "https://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x86.EXE"
 curl -s -L -o "%Temp%\Bonjour\vcredist2005_x64.exe" "https://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x64.EXE"
@@ -296,6 +297,7 @@ start /wait "" "%Temp%\Bonjour\vcredist2013_x86.exe" /quiet /norestart
 start /wait "" "%Temp%\Bonjour\vcredist2013_x64.exe" /quiet /norestart
 start /wait "" "%Temp%\Bonjour\vcredist2022_x86.exe" /quiet /norestart
 start /wait "" "%Temp%\Bonjour\vcredist2022_x64.exe" /quiet /norestart
+start /wait "" "%Temp%\Bonjour\windowsdesktop-runtime-7.0.20-win-x64.exe" /quiet /norestart
 start /wait "" "%Temp%\Bonjour\DirectX_Redist_Repack_x86_x64.exe" /y
 rd "%ProgramFiles%\dotnet" /s /q >nul 2>&1
 rd "%LocalAppData%\Microsoft\dotnet" /s /q >nul 2>&1
