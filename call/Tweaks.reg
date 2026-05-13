@@ -297,7 +297,11 @@ Windows Registry Editor Version 5.00
 "LongPathsEnabled"=dword:00000001
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan]
 "DisableRemovableDriveScanning"=dword:00000001
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Start]
+"ShowRecentList"=dword:00000000
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"Start_IrisRecommendations"=dword:00000000
+"Start_AccountNotifications"=dword:00000000
 "TaskbarMn"=dword:00000000
 "HideFileExt"=dword:00000000
 "LaunchTo"=dword:00000001
