@@ -148,6 +148,11 @@ dism /online /Disable-Feature /FeatureName:"Microsoft-Hyper-V-All" /Quiet /NoRes
 lodctr /r >nul 2>&1 && lodctr /r >nul 2>&1
 curl -s -L -o "%Temp%\Tweaks.reg" "https://github.com/Nyaldee/lain.bat/raw/main/call/Tweaks.reg"
 reg import "%Temp%\Tweaks.reg" >nul 2>&1 & del "%Temp%\Tweaks.reg"
+(
+echo taskkill /F /IM CrossDeviceResume.exe
+echo taskkill /F /IM smartscreen.exe
+echo taskkill /F /IM SoftLandingTask.exe
+) > "%AppData%\Microsoft\Windows\Start Menu\Programs\Startup\taskkill.bat"
 ::schtasks /create /tn "\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTask" /xml "%SystemRoot%\System32\Tasks\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTask" /f
 ::schtasks /create /tn "\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTaskNetwork" /xml "%SystemRoot%\System32\Tasks\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTaskNetwork" /f
 ::schtasks /create /tn "\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTaskLogon" /xml "%SystemRoot%\System32\Tasks\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTaskLogon" /f
