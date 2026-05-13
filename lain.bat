@@ -60,7 +60,7 @@ echo ╚════════════════════════
 echo.
 echo   [01] ⚡ Create a restore point / Créer un point de restauration
 echo   [02] ⚡ Configure NVIDIA / Configuration NVIDIA
-echo   [03] ⚡ System Settings / Configuration globale
+echo   [03] ⚡ System Settings / Configuration globale (restart after)
 echo   [04] ⚡ Network Settings / Paramètres réseau (not safe)
 echo   [05] ⚡ Power Plan / Plan d’alimentation
 echo   [06] ⚡ Install Runtime ^& Frameworks / Installer les runtimes et frameworks
@@ -674,8 +674,8 @@ goto Services_menu
 
 :Services_2
 echo [ INITIALIZATION ] Please wait... The changes will take effect after a reboot
-curl -s -L -o "%Temp%\RestoreServices.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/RestoreServices.bat"
-call "%Temp%\Disable services.bat" & del "%Temp%\Disable services.bat"
+curl -s -L -o "%Temp%\Restore services.bat" "https://github.com/Nyaldee/lain.bat/raw/main/call/RestoreServices.bat"
+call "%Temp%\Restore services.bat" & del "%Temp%\Restore services.bat"
 pause
 goto Services_menu
 
@@ -701,7 +701,7 @@ echo   [06] ⚡ Steam shortcut without a browser on desktop
 echo   [07] 🐺 LibreWolf
 echo   [08] ⚡ Run the full Disk Cleanup tool on all disks
 echo   [09] ⚡ ASCII Art
-echo   [10]⚡ Making Valorant Work
+echo   [10] ⚡ Making Valorant Work
 echo   [X]  ⚡ Back to menu / Retour
 echo.
 echo ════════════════════════════════════════════════════════════════
