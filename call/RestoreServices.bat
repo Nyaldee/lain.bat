@@ -1,4 +1,5 @@
 @echo off
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\ClipSVC" /v "Start" /t REG_DWORD /d "3" /f >nul 2>&1
 sc config "ADPSvc" start= demand >nul 2>&1
 sc config "ALG" start= demand >nul 2>&1
 sc config "AppIDSvc" start= demand >nul 2>&1
