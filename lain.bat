@@ -734,8 +734,9 @@ echo   [06] ⚡ Steam shortcut without a browser on desktop
 echo   [07] 🐺 LibreWolf
 echo   [08] ⚡ Making Valorant Work
 echo   [09] ⚡ DISM + scannow
-echo   [10] ⚡ Run the full Disk Cleanup tool on all disks
-echo   [11] ⚡ ASCII Art
+echo   [10] ⚡ Install WSL
+echo   [11] ⚡ Run the full Disk Cleanup tool on all disks
+echo   [12] ⚡ ASCII Art
 echo   [X]  ⚡ Back to menu / Retour
 echo.
 echo ════════════════════════════════════════════════════════════════
@@ -756,6 +757,7 @@ if "%RESPONSE%"=="8" goto Misc_8
 if "%RESPONSE%"=="9" goto Misc_9
 if "%RESPONSE%"=="10" goto Misc_10
 if "%RESPONSE%"=="11" goto Misc_11
+if "%RESPONSE%"=="12" goto Misc_12
 
 echo Invalid choice / Choix invalide
 pause
@@ -833,12 +835,23 @@ pause
 goto Misc_menu
 
 :Misc_10
+dism /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart >nul 2>&1
+dism /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart >nul 2>&1
+dism /online /enable-feature /featurename:HypervisorPlatform /all /norestart >nul 2>&1
+call :Ansi
+powershell -Command "Get-PnpDevice | Where-Object { $_.FriendlyName -like '*Hyper-V Virtualization Infrastructure*' -or $_.FriendlyName -like '*Virtual Drive Enumerator*' } | Enable-PnpDevice -Confirm:$false"
+call :Utf8
+wsl --install Ubuntu --location "D:\WSL\Ubuntu"
+call :Done
+goto Misc_menu
+
+:Misc_11
 curl -s -L -o "%Temp%\sageset.reg" "%URL_SAGESET_REG%"
 reg import "%Temp%\sageset.reg" >nul 2>&1 & del "%Temp%\sageset.reg"
 cleanmgr.exe /dc /sagerun:1
 goto Misc_menu
 
-:Misc_11
+:Misc_12
 cls
 echo. ⠀⠀⠀⠀⠀⠀⠀⠄⣀⠢⢀⣤⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⡔⢀⠂⡜⢭⢻⣍⢯⡻⣝⣿⣿⡿⣟⠂
 echo. ⠀⠀⠀⠀⠀⠀⠀⠄⠀⣦⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡔⡀⢂⠜⣪⢗⡾⣶⡽⣾⣟⣯⠛⠀⠀
