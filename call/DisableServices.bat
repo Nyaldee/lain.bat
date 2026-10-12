@@ -3,6 +3,7 @@ sc config cdrom start= disabled >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\cdrom" /v "AutoRun" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\svsvc" /v "Start" /t REG_DWORD /d "3" /f >nul 2>&1
 sc config "beep" start= Disabled >nul 2>&1
+sc config "whesvc" start= Disabled >nul 2>&1
 sc config "WSAIFabricSvc" start= Disabled >nul 2>&1
 sc config "ndu" start= Disabled >nul 2>&1
 sc config "DiagTrack" start= Disabled >nul 2>&1
